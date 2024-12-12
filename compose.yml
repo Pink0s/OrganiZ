@@ -21,8 +21,8 @@ services:
       POSTGRES_DB: organiz_database
       POSTGRES_PASSWORD: password
       POSTGRES_USER: api_user
-    expose:
-      - "5432"
+    ports:
+      - "5432:5432"
     networks: 
       - data_network
     volumes:
