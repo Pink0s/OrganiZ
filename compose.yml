@@ -1,0 +1,19 @@
+---
+services:
+  database:
+    image: postgres:17.2-bookworm
+    restart: always
+    environment:
+      POSTGRES_DB: organiz_database
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: api_user
+    ports:
+      - "5432:5432"
+    networks: 
+      - data_network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+networks:
+  data_network:
+volumes:
+  postgres-data:
