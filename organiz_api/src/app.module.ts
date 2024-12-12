@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { config_module } from './configurations/config_module';
-import { typeorm_config } from './configurations/typeorm_config';
-import { UserAccountsModule } from './user_accounts/user_accounts.module';
+import { configModule } from './configurations/configModule';
+import { typeormConfig } from './configurations/typeormConfig';
+import { UserAccountsModule } from './userAccounts/userAccounts.module';
 
 @Module({
-  imports: [config_module, typeorm_config, UserAccountsModule],
+  imports: [configModule, typeormConfig, UserAccountsModule],
   controllers: [],
   providers: [],
 })

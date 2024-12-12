@@ -1,13 +1,13 @@
 import { DynamicModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { UserAccount } from '../user_accounts/entities/user_account.entity';
+import { UserAccount } from '../userAccounts/entities/userAccount.entity';
 import { Task } from '../tasks/entities/task.entity';
 import { Category } from '../categories/entities/category.entity';
 import { Status } from '../statuses/entities/status.entity';
 import { Project } from '../projects/entities/project.entity';
 
-export const typeorm_config: DynamicModule = TypeOrmModule.forRootAsync({
+export const typeormConfig: DynamicModule = TypeOrmModule.forRootAsync({
   imports: [ConfigModule],
   inject: [ConfigService],
   useFactory: async (

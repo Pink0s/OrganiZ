@@ -7,9 +7,10 @@ import {
   Post,
   Req,
 } from '@nestjs/common';
-import { UserAccountsService } from '../services/user_accounts.service';
+import { UserAccountsService } from '../services/userAccounts.service';
 import { RegisterUserDTO } from '../dto/registerUserDTO';
 import { ApiCreatedResponse } from '@nestjs/swagger';
+import { LoginUserDTO } from '../dto/loginUserDTO';
 
 /**
  * Controller responsible for managing user accounts.
@@ -35,7 +36,19 @@ export class UserAccountsController {
     this.logger.log(`${request.method} ${request.url}`);
     this.logger.debug(`${request.method} ${request.url} ${data}`);
 
-    const id: number = await this.userAccountsService.create_user(data);
+    const id: number = await this.userAccountsService.createUser(data);
     return { id: id };
+  }
+
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  @ApiCreatedResponse({ description: 'User login' })
+  async loginUser(
+    @Req() request: Request,
+    @Body() data: LoginUserDTO,
+  ): Promise<null> {
+    this.logger.log(`${request.method} ${request.url}`);
+    this.logger.debug(`${request.method} ${request.url} ${data}`);
+    return;
   }
 }

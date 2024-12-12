@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserAccount } from '../entities/user_account.entity';
+import { UserAccount } from '../entities/userAccount.entity';
 import { RegisterUserDTO } from '../dto/registerUserDTO';
 import * as bcrypt from 'bcrypt';
 
@@ -23,7 +23,7 @@ export class UserAccountsService {
    * @returns The ID of the newly created user.
    * @throws ConflictException - If a user with the provided email already exists.
    */
-  async create_user(userDto: RegisterUserDTO): Promise<number> {
+  async createUser(userDto: RegisterUserDTO): Promise<number> {
     const isUserExists: boolean = await this.userAccountRepository.existsBy({
       email: userDto.email,
     });

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserAccountsController } from './user_accounts.controller';
-import { UserAccountsService } from '../services/user_accounts.service';
+import { UserAccountsController } from './userAccounts.controller';
+import { UserAccountsService } from '../services/userAccounts.service';
 import { RegisterUserDTO } from '../dto/registerUserDTO';
 
 describe('UserAccountsController', () => {
@@ -9,7 +9,7 @@ describe('UserAccountsController', () => {
 
   beforeEach(async () => {
     const mockService = {
-      create_user: jest.fn().mockResolvedValue(1),
+      createUser: jest.fn().mockResolvedValue(1),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -46,7 +46,7 @@ describe('UserAccountsController', () => {
       const result = await controller.registerUser(mockRequest, mockData);
 
       expect(result).toEqual({ id: 1 });
-      expect(service.create_user).toHaveBeenCalledWith(mockData);
+      expect(service.createUser).toHaveBeenCalledWith(mockData);
     });
   });
 });
