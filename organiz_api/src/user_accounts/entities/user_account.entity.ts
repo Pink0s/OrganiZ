@@ -12,6 +12,10 @@ import {
 import { Project } from '../../projects/entities/project.entity';
 import { Task } from '../../tasks/entities/task.entity';
 
+/**
+ * Represents a user account in the system.
+ * This entity is mapped to the `user_accounts` table in the database.
+ */
 @Entity('user_accounts')
 export class UserAccount {
   @PrimaryGeneratedColumn({ type: 'bigint' })
@@ -26,8 +30,21 @@ export class UserAccount {
   @Column({ type: 'varchar', length: 35, unique: true, nullable: false })
   email: string;
 
-  @Column({ type: 'varchar', length: 80, nullable: false })
-  password: string;
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: false,
+    name: 'password_hash',
+  })
+  passwordHash: string;
+
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: false,
+    name: 'password_salt',
+  })
+  passwordSalt: string;
 
   @Column({ type: 'varchar', length: 25, nullable: false, default: 'USER' })
   role: string;
@@ -70,13 +87,15 @@ export class UserAccount {
     firstname: string,
     lastname: string,
     email: string,
-    password: string,
+    passwordHash: string,
+    passwordSalt: string,
     role: string,
   ) {
     this.firstname = firstname;
     this.lastname = lastname;
     this.email = email;
-    this.password = password;
+    this.passwordHash = passwordHash;
+    this.passwordSalt = passwordSalt;
     this.role = role;
   }
 }
