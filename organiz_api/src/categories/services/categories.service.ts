@@ -35,7 +35,7 @@ export class CategoriesService {
   }
 
   async findAll(): Promise<Category[]> {
-    return this.categoryRepository.find();
+    return this.categoryRepository.findBy({ deletedAt: null });
   }
 
   async findOne(id: number): Promise<Category> {
@@ -43,7 +43,7 @@ export class CategoriesService {
       id: id,
     });
 
-    if (!category) {
+    if (!category || category.deletedAt !== null) {
       throw new NotFoundException('Category not found');
     }
 
@@ -57,5 +57,10 @@ export class CategoriesService {
     return await this.categoryRepository.save(category);
   }
 
-  g
+  async delete(id: number): Promise<number> {
+    const category: Category = await this.findOne(id);
+    category.deletedAt = new Date();
+    const savedCategory = await this.categoryRepository.save(category);
+    return savedCategory.id;
+  }
 }

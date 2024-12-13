@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Logger, Param, Post, Put, Req } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, Post, Put, Req } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
 import { CreateCategoryDTO } from '../dto/createCategoryDTO';
 import { CategoriesService } from '../services/categories.service';
@@ -56,5 +56,14 @@ export class CategoriesController {
   ) {
     this.logger.log(`${request.method} ${request.url}`);
     return this.categoriesService.update(id, updateCategoryDTO.name);
+  }
+
+  @Delete(':id')
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ description: 'Delete categories by id' })
+  @HttpCode(HttpStatus.OK)
+  async deleteCategories(@Req() request: Request, @Param('id') id: number) {
+    this.logger.log(`${request.method} ${request.url}`);
+    return this.categoriesService.delete(id);
   }
 }
