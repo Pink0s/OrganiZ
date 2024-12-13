@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from '../entities/category.entity';
@@ -44,4 +49,13 @@ export class CategoriesService {
 
     return category;
   }
+
+  async update(id: number, name: string): Promise<Category> {
+    const category: Category = await this.findOne(id);
+    category.name = name;
+    category.updatedAt = new Date();
+    return await this.categoryRepository.save(category);
+  }
+
+  g
 }

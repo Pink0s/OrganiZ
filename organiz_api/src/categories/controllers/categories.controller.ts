@@ -1,9 +1,9 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Logger, Param, Post, Req } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Logger, Param, Post, Put, Req } from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
 import { CreateCategoryDTO } from '../dto/createCategoryDTO';
 import { CategoriesService } from '../services/categories.service';
 import { Request } from 'express';
-import { retry } from "rxjs";
+import { UpdateCategoryDTO } from '../dto/updateCategoryDTO';
 
 @Controller('categories')
 export class CategoriesController {
@@ -43,5 +43,18 @@ export class CategoriesController {
   async getCategories(@Req() request: Request, @Param('id') id: number) {
     this.logger.log(`${request.method} ${request.url}`);
     return this.categoriesService.findOne(id);
+  }
+
+  @Put(':id')
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ description: 'Update categories by id' })
+  @HttpCode(HttpStatus.OK)
+  async modifyCategory(
+    @Body() updateCategoryDTO: UpdateCategoryDTO,
+    @Req() request: Request,
+    @Param('id') id: number,
+  ) {
+    this.logger.log(`${request.method} ${request.url}`);
+    return this.categoriesService.update(id, updateCategoryDTO.name);
   }
 }
