@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn
 } from "typeorm";
-import { UserAccount } from '../../user_accounts/entities/user_account.entity';
+import { UserAccount } from '../../userAccounts/entities/userAccount.entity';
 import { Category } from '../../categories/entities/category.entity';
 import { Status } from '../../statuses/entities/status.entity';
 import { Task } from '../../tasks/entities/task.entity';

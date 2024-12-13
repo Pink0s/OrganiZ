@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserAccountsService } from './user_accounts.service';
+import { UserAccountsService } from './userAccounts.service';
 import { Repository } from 'typeorm';
-import { UserAccount } from '../entities/user_account.entity';
+import { UserAccount } from '../entities/userAccount.entity';
 import { RegisterUserDTO } from '../dto/registerUserDTO';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
@@ -51,7 +51,7 @@ describe('UserAccountsService', () => {
         id: 1,
       } as UserAccount);
 
-      const result = await service.create_user(mockUserDTO);
+      const result = await service.createUser(mockUserDTO);
 
       expect(repository.existsBy).toHaveBeenCalledWith({
         email: mockUserDTO.email,
@@ -76,7 +76,7 @@ describe('UserAccountsService', () => {
 
       jest.spyOn(repository, 'existsBy').mockResolvedValue(true);
 
-      await expect(service.create_user(mockUserDTO)).rejects.toThrow(
+      await expect(service.createUser(mockUserDTO)).rejects.toThrow(
         ConflictException,
       );
       expect(repository.existsBy).toHaveBeenCalledWith({

@@ -14,9 +14,9 @@ import { Task } from '../../tasks/entities/task.entity';
 
 /**
  * Represents a user account in the system.
- * This entity is mapped to the `user_accounts` table in the database.
+ * This entity is mapped to the `userAccounts` table in the database.
  */
-@Entity('user_accounts')
+@Entity('userAccounts')
 export class UserAccount {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
