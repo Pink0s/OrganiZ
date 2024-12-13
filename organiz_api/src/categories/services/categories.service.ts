@@ -28,4 +28,12 @@ export class CategoriesService {
 
     return savedCategory.id;
   }
+
+  async findAll(): Promise<Category[]> {
+    return this.categoryRepository.find();
+  }
+
+  async findOne(id: number): Promise<Category> {
+    return this.categoryRepository.findOneBy({ id: id });
+  }
 }
