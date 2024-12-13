@@ -1,9 +1,17 @@
-import { ConflictException, Injectable, Logger } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserAccount } from '../entities/userAccount.entity';
-import { RegisterUserDTO } from '../dto/registerUserDTO';
 import * as bcrypt from 'bcrypt';
+import { LoginUserDTO } from '../dto/loginUserDTO';
+import { SignInResponseDto } from '../dto/signInResponseDTO';
+import { RegisterUserDTO } from '../dto/registerUserDTO';
+import { JwtService } from '@nestjs/jwt';
 
 /**
  * Service responsible for managing user accounts.
@@ -15,6 +23,7 @@ export class UserAccountsService {
   constructor(
     @InjectRepository(UserAccount)
     private readonly userAccountRepository: Repository<UserAccount>,
+    private jwtService: JwtService,
   ) {}
 
   /**
@@ -49,5 +58,54 @@ export class UserAccountsService {
     this.logger.log(`new user with id ${savedUser.id} saved`);
     this.logger.debug(`${savedUser} saved successfully`);
     return savedUser.id;
+  }
+
+  /**
+   * Checks if a user exists in the repository by their email.
+   *
+   * @private
+   * @param {string} email - The email address of the user to check.
+   * @returns {Promise<boolean>} A promise that resolves to `true` if the user exists, otherwise `false`.
+   */
+  async #isUserExists(email: string): Promise<boolean> {
+    return this.userAccountRepository.existsBy({
+      email: email,
+    });
+  }
+
+  /**
+   * Handles the sign-in process for a user.
+   *
+   * @param {LoginUserDTO} userDTO - The login data transfer object containing the user's email and password.
+   * @returns {Promise<SignInResponseDto>} A promise that resolves to a `SignInResponseDto` containing the authentication token.
+   *
+   * @throws {UnauthorizedException} If the user does not exist or the provided password is incorrect.
+   *
+   * @description This method verifies if the user exists, checks the password, and generates a JWT token if the credentials are valid.
+   */
+  async signInUser(userDTO: LoginUserDTO): Promise<SignInResponseDto> {
+    const isUserExists: boolean = await this.#isUserExists(userDTO.email);
+    if (!isUserExists) {
+      this.logger.error(`${userDTO.email} doesn't exists`);
+      throw new UnauthorizedException();
+    }
+
+    const user: UserAccount = await this.userAccountRepository.findOneBy({
+      email: userDTO.email,
+    });
+
+    if (!bcrypt.compareSync(userDTO.password, user.passwordHash)) {
+      throw new UnauthorizedException();
+    }
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      role: user.role,
+    };
+
+    return new SignInResponseDto(await this.jwtService.signAsync(payload));
   }
 }

@@ -1,16 +1,19 @@
 import {
+  Request,
   Body,
   Controller,
   HttpCode,
   HttpStatus,
   Logger,
   Post,
-  Req,
+  Req
 } from '@nestjs/common';
 import { UserAccountsService } from '../services/userAccounts.service';
 import { RegisterUserDTO } from '../dto/registerUserDTO';
 import { ApiCreatedResponse } from '@nestjs/swagger';
 import { LoginUserDTO } from '../dto/loginUserDTO';
+import { SignInResponseDto } from '../dto/signInResponseDTO';
+import { Public } from '../guards/auth.guards';
 
 /**
  * Controller responsible for managing user accounts.
@@ -29,6 +32,7 @@ export class UserAccountsController {
    * @returns An object containing the ID of the newly created user.
    * @throws ConflictException - If a user with the given email already exists.
    */
+  @Public()
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiCreatedResponse({ description: 'User registration' })
@@ -40,15 +44,26 @@ export class UserAccountsController {
     return { id: id };
   }
 
+  /**
+   * Handles the user login operation.
+   *
+   * @param {Request} request - The incoming HTTP request object.
+   * @param {LoginUserDTO} data - The user login data transfer object containing login credentials.
+   * @returns {Promise<SignInResponseDto>} A promise that resolves to a SignInResponseDto containing the authentication token.
+   *
+   * @description Processes the user login, and returns an authentication token.
+   *
+   */
+  @Public()
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiCreatedResponse({ description: 'User login' })
   async loginUser(
     @Req() request: Request,
     @Body() data: LoginUserDTO,
-  ): Promise<null> {
+  ): Promise<SignInResponseDto> {
     this.logger.log(`${request.method} ${request.url}`);
     this.logger.debug(`${request.method} ${request.url} ${data}`);
-    return;
+    return await this.userAccountsService.signInUser(data);
   }
 }

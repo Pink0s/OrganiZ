@@ -15,10 +15,10 @@ async function bootstrap() {
     .setTitle('OrganiZ API')
     .setDescription('The OrganiZ api')
     .setVersion('1.0.0')
+    .addBearerAuth()
     .build();
 
-  const document = SwaggerModule.createDocument(app,
-    options);
+  const document = SwaggerModule.createDocument(app, options);
 
   SwaggerModule.setup('api/swagger', app, document);
 
