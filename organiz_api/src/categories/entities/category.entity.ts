@@ -9,6 +9,12 @@ import {
 } from 'typeorm';
 import { Project } from '../../projects/entities/project.entity';
 
+/**
+ * Represents the Category entity in the database.
+ *
+ * @entity
+ * This entity maps to the `categories` table in the database.
+ */
 @Entity('categories')
 export class Category {
   @PrimaryGeneratedColumn()
