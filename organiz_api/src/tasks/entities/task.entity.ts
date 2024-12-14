@@ -10,7 +10,14 @@ import {
 } from 'typeorm';
 import { Status } from '../../statuses/entities/status.entity';
 import { Project } from '../../projects/entities/project.entity';
+import { UserAccount } from '../../userAccounts/entities/userAccount.entity';
 
+/**
+ * Represents the Task entity in the database.
+ *
+ * @entity
+ * Maps to the `tasks` table in the database.
+ */
 @Entity('tasks')
 export class Task {
   @PrimaryGeneratedColumn({ type: 'bigint' })
@@ -30,6 +37,14 @@ export class Task {
   @JoinColumn({ name: 'project_id' })
   project: Project;
 
+  @ManyToOne(
+    () => UserAccount,
+    (userAccount: UserAccount) => userAccount.id,
+    {},
+  )
+  @JoinColumn({ name: 'assigned_user_id' })
+  assignedUser: UserAccount;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
@@ -38,4 +53,18 @@ export class Task {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
+
+  constructor(
+    name: string,
+    description: string | undefined,
+    status: Status,
+    project: Project,
+    user: UserAccount,
+  ) {
+    this.name = name;
+    this.description = description;
+    this.status = status;
+    this.project = project;
+    this.assignedUser = user;
+  }
 }

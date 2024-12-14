@@ -16,7 +16,7 @@ import { Task } from '../../tasks/entities/task.entity';
  * Represents a user account in the system.
  * This entity is mapped to the `userAccounts` table in the database.
  */
-@Entity('userAccounts')
+@Entity('user_accounts')
 export class UserAccount {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
@@ -71,7 +71,7 @@ export class UserAccount {
   })
   ownedProjects: Project[];
 
-  @OneToMany(() => Task, (task: Task) => task.id, {})
+  @OneToMany(() => Task, (task: Task) => task.assignedUser, { eager: true })
   tasks: Task[];
 
   @CreateDateColumn({ name: 'created_at' })

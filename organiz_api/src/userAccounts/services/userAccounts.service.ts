@@ -109,9 +109,37 @@ export class UserAccountsService {
     return new SignInResponseDto(await this.jwtService.signAsync(payload));
   }
 
+  /**
+   * Retrieves a user account by its ID.
+   *
+   * @param {number} userId - The unique ID of the user account to retrieve.
+   * @returns {Promise<UserAccount>} A promise that resolves to the retrieved `UserAccount` entity.
+   *
+   * @throws {NotFoundException} If the user account with the given ID does not exist.
+   */
   async getById(userId: number): Promise<UserAccount> {
     const userAccount = await this.userAccountRepository.findOneBy({
       id: userId,
+    });
+
+    if (!userAccount) {
+      throw new NotFoundException('User does not exist');
+    }
+
+    return userAccount;
+  }
+
+  /**
+   * Retrieves a user account by its email address.
+   *
+   * @param {string} email - The email address of the user account to retrieve.
+   * @returns {Promise<UserAccount>} A promise that resolves to the retrieved `UserAccount` entity.
+   *
+   * @throws {NotFoundException} If the user account with the given email does not exist.
+   */
+  async getByEmail(email: string): Promise<UserAccount> {
+    const userAccount = await this.userAccountRepository.findOneBy({
+      email: email,
     });
 
     if (!userAccount) {

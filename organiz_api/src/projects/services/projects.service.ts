@@ -238,4 +238,45 @@ export class ProjectsService {
 
     return savedProject.id;
   }
+
+  /**
+   * Adds a user to a project by their email address.
+   *
+   * @param {number} projectId - The ID of the project to which the user will be added.
+   * @param {string} email - The email address of the user to be added to the project.
+   * @returns {Promise<number>} A promise that resolves to the ID of the updated project.
+   *
+   * @description This method retrieves the project by its ID, checks if the user exists,
+   * and adds the user to the project's `userAccounts` relation if they are not already included.
+   * Updates the project's `updatedAt` timestamp and saves the changes to the database.
+   *
+   * @throws {NotFoundException} If the project is not found or has been marked as deleted.
+   * @throws {NotFoundException} If the user associated with the given email is not found.
+   *
+   */
+  async addUserToProject(projectId: number, email: string): Promise<number> {
+    const project = await this.projectRepository.findOne({
+      where: { id: projectId },
+      relations: ['userAccounts'],
+    });
+
+    console.log(JSON.stringify(project));
+
+    if (!project || project.deletedAt !== null) {
+      this.logger.error(`Project id : ${projectId} not found`);
+      throw new NotFoundException('Project not found');
+    }
+
+    const newUser = await this.userAccountService.getByEmail(email);
+
+    if (!project.userAccounts.includes(newUser)) {
+      project.userAccounts.push(newUser);
+    }
+
+    project.updatedAt = new Date();
+
+    const savedProject = await this.projectRepository.save(project);
+
+    return savedProject.id;
+  }
 }
