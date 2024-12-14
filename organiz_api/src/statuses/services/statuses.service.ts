@@ -57,4 +57,11 @@ export class StatusesService {
 
     return await this.statusRepository.save(actualStatus);
   }
+
+  async delete(id: number): Promise<number> {
+    const status: Status = await this.findOne(id);
+    status.deletedAt = new Date();
+    const savedStatus: Status = await this.statusRepository.save(status);
+    return savedStatus.id;
+  }
 }

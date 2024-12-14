@@ -1,9 +1,21 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Logger, Param, Post, Put, Req, Res } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Logger,
+  Param,
+  Post,
+  Put,
+  Req,
+} from '@nestjs/common';
 import { StatusesService } from '../services/statuses.service';
 import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateStatusDTO } from '../dto/createStatusDTO';
-import { UpdateStatusDTO } from "../dto/updateStatusDTO";
+import { UpdateStatusDTO } from '../dto/updateStatusDTO';
 
 @Controller('statuses')
 export class StatusesController {
@@ -51,5 +63,14 @@ export class StatusesController {
   ) {
     this.logger.log(`${request.method} ${request.url}`);
     return this.statusesService.update(id, updateStatusDTO.name);
+  }
+
+  @Delete(':id')
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ description: 'Delete a status' })
+  @HttpCode(HttpStatus.OK)
+  async deleteStatus(@Req() request: Request, @Param('id') id: number) {
+    this.logger.log(`${request.method} ${request.url}`);
+    return this.statusesService.delete(id);
   }
 }
