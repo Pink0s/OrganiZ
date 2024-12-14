@@ -120,4 +120,16 @@ export class UserAccountsService {
 
     return userAccount;
   }
+
+  async getByEmail(email: string): Promise<UserAccount> {
+    const userAccount = await this.userAccountRepository.findOneBy({
+      email: email,
+    });
+
+    if (!userAccount) {
+      throw new NotFoundException('User does not exist');
+    }
+
+    return userAccount;
+  }
 }

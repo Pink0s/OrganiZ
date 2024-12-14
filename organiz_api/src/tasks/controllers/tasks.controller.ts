@@ -5,7 +5,8 @@ import {
   Logger,
   Post,
   Get,
-  Param, Query
+  Param,
+  Query, Delete
 } from "@nestjs/common";
 import { TasksService } from '../services/tasks.service';
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery } from "@nestjs/swagger";
@@ -58,5 +59,13 @@ export class TasksController {
   ) {
     this.logger.log(`${request.method} ${request.url}`);
     return this.tasksService.findAll(request.user.id, projectId, onlyMy);
+  }
+
+  @Delete(':id')
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ description: 'Delete a task' })
+  async deleteTask(@Param('id') id: number, @Request() request: any) {
+    this.logger.log(`${request.method} ${request.url}`);
+    return this.tasksService.delete(request.user.id, id);
   }
 }

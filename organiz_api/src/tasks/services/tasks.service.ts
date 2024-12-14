@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from '../entities/task.entity';
 import { Brackets, Repository } from 'typeorm';
@@ -88,5 +93,39 @@ export class TasksService {
     }
 
     return await query.getMany();
+  }
+
+  async delete(userId: number, taskId: number): Promise<number> {
+    const user: UserAccount = await this.userAccountRepository.findOneBy({
+      id: userId,
+    });
+
+    const isTaskExists = await this.taskRepository.existsBy({ id: taskId });
+
+    if (!isTaskExists) {
+      throw new NotFoundException(`Task with id ${taskId} not found`);
+    }
+
+    const task: Task = await this.taskRepository.findOne({
+      where: { id: taskId },
+      relations: ['project'],
+    });
+
+    let AmIUser: boolean = false;
+    for (const usr of task.project.userAccounts) {
+      if (usr.id === userId) {
+        AmIUser = true;
+      }
+    }
+
+    if (user.id !== task.project.owner.id && !AmIUser) {
+      throw new UnauthorizedException('Unauthorized');
+    }
+
+    task.deletedAt = new Date();
+
+    const deletedTask: Task = await this.taskRepository.save(task);
+
+    return deletedTask.id;
   }
 }

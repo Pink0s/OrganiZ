@@ -11,6 +11,7 @@ import {
   Param,
   Delete,
   Put,
+  Patch,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery } from '@nestjs/swagger';
 import { CreateProjectDTO } from '../dto/createProjectDTO';
@@ -94,6 +95,24 @@ export class ProjectsController {
     return this.projectsService.findOneById(request.user.id, id);
   }
 
+  @Patch(':id')
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ description: 'Modify one project by id' })
+  @HttpCode(HttpStatus.OK)
+  @ApiQuery({
+    name: 'email',
+    required: true,
+    type: String,
+    description: 'Email address',
+  })
+  async addUserToProject(
+    @Request() request: any,
+    @Param('id') id: number,
+    @Query('email') email: string,
+  ): Promise<number> {
+    this.logger.log(`${request.method} ${request.url}`);
+    return this.projectsService.addUserToProject(id, email);
+  }
   /**
    * Updates a project by ID.
    *

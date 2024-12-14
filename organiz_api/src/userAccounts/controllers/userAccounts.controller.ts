@@ -14,6 +14,8 @@ import { ApiCreatedResponse } from '@nestjs/swagger';
 import { LoginUserDTO } from '../dto/loginUserDTO';
 import { SignInResponseDto } from '../dto/signInResponseDTO';
 import { Public } from '../guards/auth.guards';
+import { UserAccount } from "../entities/userAccount.entity";
+import { request } from "express";
 
 /**
  * Controller responsible for managing user accounts.

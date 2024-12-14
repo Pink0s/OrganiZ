@@ -1,9 +1,9 @@
 import {
   Injectable,
   Logger,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+  NotFoundException, Put,
+  UnauthorizedException
+} from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from '../entities/project.entity';
 import { Brackets, Repository } from 'typeorm';
@@ -14,6 +14,7 @@ import { Category } from '../../categories/entities/category.entity';
 import { CategoriesService } from '../../categories/services/categories.service';
 import { UpdateProjectDTO } from '../dto/updateProjectDTO';
 import { StatusesService } from '../../statuses/services/statuses.service';
+import { retry } from "rxjs";
 
 /**
  * Service for managing projects.
@@ -233,6 +234,32 @@ export class ProjectsService {
     }
 
     project.deletedAt = new Date();
+
+    const savedProject = await this.projectRepository.save(project);
+
+    return savedProject.id;
+  }
+
+  async addUserToProject(projectId: number, email: string) {
+    const project = await this.projectRepository.findOne({
+      where: { id: projectId },
+      relations: ['userAccounts'],
+    });
+
+    console.log(JSON.stringify(project));
+
+    if (!project || project.deletedAt !== null) {
+      this.logger.error(`Project id : ${projectId} not found`);
+      throw new NotFoundException('Project not found');
+    }
+
+    const newUser = await this.userAccountService.getByEmail(email);
+
+    if (!project.userAccounts.includes(newUser)) {
+      project.userAccounts.push(newUser);
+    }
+
+    project.updatedAt = new Date();
 
     const savedProject = await this.projectRepository.save(project);
 
