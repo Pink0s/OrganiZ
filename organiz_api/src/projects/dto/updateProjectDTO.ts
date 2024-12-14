@@ -1,7 +1,16 @@
-import { IsInt, IsNotEmpty, IsString, MaxLength, MinLength } from "@nestjs/class-validator";
-import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsOptional } from "class-validator";
+import {
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  MaxLength,
+  MinLength,
+} from '@nestjs/class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, IsOptional } from 'class-validator';
 
+/**
+ * Data Transfer Object for creating a project.
+ */
 export class UpdateProjectDTO {
   @IsNotEmpty()
   @IsString()

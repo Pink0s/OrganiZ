@@ -15,6 +15,12 @@ import { CategoriesService } from '../../categories/services/categories.service'
 import { UpdateProjectDTO } from '../dto/updateProjectDTO';
 import { StatusesService } from '../../statuses/services/statuses.service';
 
+/**
+ * Service for managing projects.
+ *
+ * @injectable
+ * Handles business logic for creating, retrieving, updating, and deleting projects.
+ */
 @Injectable()
 export class ProjectsService {
   private readonly logger = new Logger(ProjectsService.name);
@@ -29,6 +35,15 @@ export class ProjectsService {
     private readonly statusService: StatusesService,
   ) {}
 
+  /**
+   * Creates a new project.
+   *
+   * @param {CreateProjectDTO} createProjectDTO - The data transfer object containing project details.
+   * @param {number} userId - The ID of the user creating the project.
+   * @returns {Promise<number>} A promise that resolves to the ID of the created project.
+   *
+   * @throws {NotFoundException} If the user or status is not found.
+   */
   async create(
     createProjectDTO: CreateProjectDTO,
     userId: number,
@@ -70,6 +85,13 @@ export class ProjectsService {
     return savedProject.id;
   }
 
+  /**
+   * Retrieves all projects associated with a user, optionally filtered by status name.
+   *
+   * @param {number} userId - The ID of the user.
+   * @param {string} [statusName] - Optional status name filter.
+   * @returns {Promise<Project[]>} A promise that resolves to an array of projects.
+   */
   async findAll(userId: number, statusName?: string): Promise<Project[]> {
     const query = this.projectRepository
       .createQueryBuilder('project')
@@ -93,6 +115,15 @@ export class ProjectsService {
     return await query.getMany();
   }
 
+  /**
+   * Retrieves a single project by ID for a specific user.
+   *
+   * @param {number} userId - The ID of the user.
+   * @param {number} projectId - The ID of the project.
+   * @returns {Promise<Project>} A promise that resolves to the project.
+   *
+   * @throws {NotFoundException} If the project is not found or the user does not have access.
+   */
   async findOneById(userId: number, projectId: number): Promise<Project> {
     const project = await this.projectRepository
       .createQueryBuilder('project')
@@ -119,6 +150,16 @@ export class ProjectsService {
     return project;
   }
 
+  /**
+   * Updates a project by ID for a specific user.
+   *
+   * @param {number} userId - The ID of the user.
+   * @param {number} projectId - The ID of the project.
+   * @param {UpdateProjectDTO} updateProjectDTO - The data transfer object containing updated project details.
+   * @returns {Promise<Project>} A promise that resolves to the updated project.
+   *
+   * @throws {NotFoundException} If the project is not found.
+   */
   async updateById(
     userId: number,
     projectId: number,
@@ -166,6 +207,16 @@ export class ProjectsService {
     return this.projectRepository.save(project);
   }
 
+  /**
+   * Marks a project as deleted by ID for a specific user.
+   *
+   * @param {number} userId - The ID of the user.
+   * @param {number} projectId - The ID of the project.
+   * @returns {Promise<number>} A promise that resolves to the ID of the deleted project.
+   *
+   * @throws {NotFoundException} If the project is not found.
+   * @throws {UnauthorizedException} If the user is not authorized to delete the project.
+   */
   async deleteById(userId: number, projectId: number): Promise<number> {
     const project = await this.projectRepository.findOne({
       where: [{ id: projectId, deletedAt: null }],
