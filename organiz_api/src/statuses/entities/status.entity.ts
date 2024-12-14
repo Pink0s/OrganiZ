@@ -12,8 +12,11 @@ import { Project } from '../../projects/entities/project.entity';
 
 @Entity('statuses')
 export class Status {
+  constructor(name: string) {
+    this.name = name;
+  }
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  id: string;
+  id: number;
 
   @Column({ type: 'varchar', length: 25, nullable: false, unique: true })
   name: string;
