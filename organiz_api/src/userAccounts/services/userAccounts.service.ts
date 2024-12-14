@@ -1,9 +1,9 @@
 import {
   ConflictException,
   Injectable,
-  Logger,
-  UnauthorizedException,
-} from '@nestjs/common';
+  Logger, NotFoundException,
+  UnauthorizedException
+} from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserAccount } from '../entities/userAccount.entity';
@@ -107,5 +107,17 @@ export class UserAccountsService {
     };
 
     return new SignInResponseDto(await this.jwtService.signAsync(payload));
+  }
+
+  async getById(userId: number): Promise<UserAccount> {
+    const userAccount = await this.userAccountRepository.findOneBy({
+      id: userId,
+    });
+
+    if (!userAccount) {
+      throw new NotFoundException('User does not exist');
+    }
+
+    return userAccount;
   }
 }
