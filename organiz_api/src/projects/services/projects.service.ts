@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from '../entities/project.entity';
 import { Brackets, Repository } from 'typeorm';
@@ -7,7 +12,8 @@ import { UserAccountsService } from '../../userAccounts/services/userAccounts.se
 import { Status } from '../../statuses/entities/status.entity';
 import { Category } from '../../categories/entities/category.entity';
 import { CategoriesService } from '../../categories/services/categories.service';
-import { UserAccount } from "../../userAccounts/entities/userAccount.entity";
+import { UpdateProjectDTO } from '../dto/updateProjectDTO';
+import { StatusesService } from '../../statuses/services/statuses.service';
 
 @Injectable()
 export class ProjectsService {
@@ -20,6 +26,7 @@ export class ProjectsService {
     private readonly statusRepository: Repository<Status>,
     private readonly userAccountService: UserAccountsService,
     private readonly categoryService: CategoriesService,
+    private readonly statusService: StatusesService,
   ) {}
 
   async create(
@@ -68,6 +75,7 @@ export class ProjectsService {
       .createQueryBuilder('project')
       .leftJoin('project.userAccounts', 'userAccount')
       .leftJoinAndSelect('project.status', 'status')
+      .leftJoinAndSelect('project.categories', 'categories')
       .andWhere(
         new Brackets((qb) => {
           qb.where('project.owner = :userId', { userId }).orWhere(
@@ -79,7 +87,7 @@ export class ProjectsService {
       .andWhere('project.deleted_at IS NULL');
 
     if (statusName) {
-      query.andWhere('status.name = :statusName', { statusName })
+      query.andWhere('status.name = :statusName', { statusName });
     }
 
     return await query.getMany();
@@ -90,6 +98,7 @@ export class ProjectsService {
       .createQueryBuilder('project')
       .leftJoin('project.userAccounts', 'userAccount')
       .leftJoinAndSelect('project.status', 'status')
+      .leftJoinAndSelect('project.categories', 'categories')
       .where('project.id = :projectId', { projectId })
       .andWhere('project.deleted_at IS NULL')
       .andWhere(
@@ -108,6 +117,53 @@ export class ProjectsService {
     }
 
     return project;
+  }
+
+  async updateById(
+    userId: number,
+    projectId: number,
+    updateProjectDTO: UpdateProjectDTO,
+  ): Promise<Project> {
+    const project: Project = await this.findOneById(userId, projectId);
+
+    if (!project) {
+      this.logger.error(`Project id : ${projectId} not found`);
+      throw new NotFoundException('Project not found');
+    }
+
+    if (updateProjectDTO.name && updateProjectDTO.name !== project.name) {
+      project.name = updateProjectDTO.name;
+    }
+
+    if (
+      updateProjectDTO.description &&
+      updateProjectDTO.description !== project.description
+    ) {
+      project.description = updateProjectDTO.description;
+    }
+
+    if (
+      updateProjectDTO.status &&
+      updateProjectDTO.status !== project.status.id
+    ) {
+      project.status = await this.statusService.findOne(
+        updateProjectDTO.status,
+      );
+    }
+
+    if (updateProjectDTO.categories) {
+      if (updateProjectDTO.categories.length > 0) {
+        const categories: Category[] = [];
+        for (const categoryIds of updateProjectDTO.categories) {
+          categories.push(await this.categoryService.findOne(categoryIds));
+        }
+        project.categories = categories;
+      } else {
+        project.categories = [];
+      }
+    }
+
+    return this.projectRepository.save(project);
   }
 
   async deleteById(userId: number, projectId: number): Promise<number> {

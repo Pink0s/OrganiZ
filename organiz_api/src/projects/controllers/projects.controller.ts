@@ -8,12 +8,15 @@ import {
   Post,
   Get,
   Query,
-  Param, Delete
-} from "@nestjs/common";
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery } from '@nestjs/swagger';
 import { CreateProjectDTO } from '../dto/createProjectDTO';
 import { CategoriesService } from '../../categories/services/categories.service';
 import { ProjectsService } from '../services/projects.service';
+import { UpdateProjectDTO } from '../dto/updateProjectDTO';
 
 @Controller('projects')
 export class ProjectsController {
@@ -56,6 +59,23 @@ export class ProjectsController {
   async getOneProjectById(@Request() request: any, @Param('id') id: number) {
     this.logger.log(`${request.method} ${request.url}`);
     return this.projectsService.findOneById(request.user.id, id);
+  }
+
+  @Put(':id')
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ description: 'Modify one project by id' })
+  @HttpCode(HttpStatus.OK)
+  async updateProject(
+    @Request() request: any,
+    @Param('id') id: number,
+    @Body() updateProjectDTO: UpdateProjectDTO,
+  ) {
+    this.logger.log(`${request.method} ${request.url}`);
+    return this.projectsService.updateById(
+      request.user.id,
+      id,
+      updateProjectDTO,
+    );
   }
 
   @Delete(':id')
