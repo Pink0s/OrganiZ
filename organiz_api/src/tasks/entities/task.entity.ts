@@ -38,4 +38,16 @@ export class Task {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
+
+  constructor(
+    name: string,
+    description: string | undefined,
+    status: Status,
+    project: Project,
+  ) {
+    this.name = name;
+    this.description = description;
+    this.status = status;
+    this.project = project;
+  }
 }

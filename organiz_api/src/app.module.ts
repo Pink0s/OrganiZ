@@ -5,6 +5,7 @@ import { UserAccountsModule } from './userAccounts/userAccounts.module';
 import { CategoriesModule } from './categories/categories.module';
 import { StatusesModule } from './statuses/statuses.module';
 import { ProjectsModule } from './projects/projects.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ProjectsModule } from './projects/projects.module';
     CategoriesModule,
     StatusesModule,
     ProjectsModule,
+    TasksModule,
   ],
   controllers: [],
   providers: [],
