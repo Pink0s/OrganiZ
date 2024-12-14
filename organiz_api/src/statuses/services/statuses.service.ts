@@ -13,7 +13,9 @@ export class StatusesService {
   ) {}
 
   async createStatus(name: string): Promise<number> {
-    const isStatusExists = await this.statusRepository.exists({ where: { name: name } });
+    const isStatusExists = await this.statusRepository.exists({
+      where: { name: name },
+    });
 
     if (isStatusExists) {
       throw new ConflictException(`Status ${name} already exists`);
@@ -23,5 +25,19 @@ export class StatusesService {
     const savedStatus = await this.statusRepository.save(status);
 
     return savedStatus.id;
+  }
+
+  async findAll(): Promise<Status[]> {
+    return this.statusRepository.findBy({ deletedAt: null });
+  }
+
+  async findOne(id: number): Promise<Status> {
+    const status: Status = await this.statusRepository.findOneBy({ id: id });
+
+    if (!status || status.deletedAt !== null) {
+      throw new NotFoundException(`Status ${id} not found`);
+    }
+
+    return status;
   }
 }

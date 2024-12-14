@@ -1,8 +1,9 @@
-import { Body, Controller, HttpCode, HttpStatus, Logger, Post, Req, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpCode, HttpStatus, Logger, Param, Post, Put, Req, Res } from "@nestjs/common";
 import { StatusesService } from '../services/statuses.service';
 import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateStatusDTO } from '../dto/createStatusDTO';
+import { UpdateStatusDTO } from "../dto/updateStatusDTO";
 
 @Controller('statuses')
 export class StatusesController {
@@ -20,4 +21,24 @@ export class StatusesController {
     this.logger.log(`${request.method} ${request.url}`);
     return this.statusesService.createStatus(createStatusDTO.name);
   }
+
+  @Get()
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ description: 'Get all status' })
+  @HttpCode(HttpStatus.OK)
+  async getAllStatus(@Req() request: Request) {
+    this.logger.log(`${request.method} ${request.url}`);
+    return this.statusesService.findAll();
+  }
+
+  @Get(':id')
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ description: 'Get one status' })
+  @HttpCode(HttpStatus.OK)
+  async getOneStatus(@Req() request: Request, @Param('id') id: number) {
+    this.logger.log(`${request.method} ${request.url}`);
+    return this.statusesService.findOne(id);
+  }
+
+  
 }
