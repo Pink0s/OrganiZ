@@ -8,8 +8,8 @@ import {
   Post,
   Get,
   Query,
-  Param,
-} from '@nestjs/common';
+  Param, Delete
+} from "@nestjs/common";
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery } from '@nestjs/swagger';
 import { CreateProjectDTO } from '../dto/createProjectDTO';
 import { CategoriesService } from '../../categories/services/categories.service';
@@ -56,5 +56,14 @@ export class ProjectsController {
   async getOneProjectById(@Request() request: any, @Param('id') id: number) {
     this.logger.log(`${request.method} ${request.url}`);
     return this.projectsService.findOneById(request.user.id, id);
+  }
+
+  @Delete(':id')
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ description: 'Delete project by id' })
+  @HttpCode(HttpStatus.OK)
+  async deleteOneProject(@Request() request: any, @Param('id') id: number) {
+    this.logger.log(`${request.method} ${request.url}`);
+    return this.projectsService.deleteById(request.user.id, id);
   }
 }

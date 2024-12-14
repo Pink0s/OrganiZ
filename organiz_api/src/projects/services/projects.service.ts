@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from '../entities/project.entity';
 import { Brackets, Repository } from 'typeorm';
@@ -7,6 +7,7 @@ import { UserAccountsService } from '../../userAccounts/services/userAccounts.se
 import { Status } from '../../statuses/entities/status.entity';
 import { Category } from '../../categories/entities/category.entity';
 import { CategoriesService } from '../../categories/services/categories.service';
+import { UserAccount } from "../../userAccounts/entities/userAccount.entity";
 
 @Injectable()
 export class ProjectsService {
@@ -107,5 +108,27 @@ export class ProjectsService {
     }
 
     return project;
+  }
+
+  async deleteById(userId: number, projectId: number): Promise<number> {
+    const project = await this.projectRepository.findOne({
+      where: [{ id: projectId, deletedAt: null }],
+      relations: ['owner'],
+    });
+
+    if (!project) {
+      this.logger.error(`Project id : ${projectId} not found`);
+      throw new NotFoundException('Project not found');
+    }
+
+    if (project.owner.id !== userId) {
+      throw new UnauthorizedException('You are not authorized');
+    }
+
+    project.deletedAt = new Date();
+
+    const savedProject = await this.projectRepository.save(project);
+
+    return savedProject.id;
   }
 }
