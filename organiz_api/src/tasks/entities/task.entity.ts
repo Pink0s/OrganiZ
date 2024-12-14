@@ -12,6 +12,12 @@ import { Status } from '../../statuses/entities/status.entity';
 import { Project } from '../../projects/entities/project.entity';
 import { UserAccount } from '../../userAccounts/entities/userAccount.entity';
 
+/**
+ * Represents the Task entity in the database.
+ *
+ * @entity
+ * Maps to the `tasks` table in the database.
+ */
 @Entity('tasks')
 export class Task {
   @PrimaryGeneratedColumn({ type: 'bigint' })

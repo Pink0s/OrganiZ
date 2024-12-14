@@ -6,7 +6,7 @@ import {
   HttpStatus,
   Logger,
   Post,
-  Req
+  Req,
 } from '@nestjs/common';
 import { UserAccountsService } from '../services/userAccounts.service';
 import { RegisterUserDTO } from '../dto/registerUserDTO';
@@ -14,9 +14,6 @@ import { ApiCreatedResponse } from '@nestjs/swagger';
 import { LoginUserDTO } from '../dto/loginUserDTO';
 import { SignInResponseDto } from '../dto/signInResponseDTO';
 import { Public } from '../guards/auth.guards';
-import { UserAccount } from "../entities/userAccount.entity";
-import { request } from "express";
-
 /**
  * Controller responsible for managing user accounts.
  * Handles HTTP requests related to user registration.

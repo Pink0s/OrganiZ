@@ -1,9 +1,9 @@
 import {
   Injectable,
   Logger,
-  NotFoundException, Put,
-  UnauthorizedException
-} from "@nestjs/common";
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Project } from '../entities/project.entity';
 import { Brackets, Repository } from 'typeorm';
@@ -14,7 +14,6 @@ import { Category } from '../../categories/entities/category.entity';
 import { CategoriesService } from '../../categories/services/categories.service';
 import { UpdateProjectDTO } from '../dto/updateProjectDTO';
 import { StatusesService } from '../../statuses/services/statuses.service';
-import { retry } from "rxjs";
 
 /**
  * Service for managing projects.
@@ -240,7 +239,22 @@ export class ProjectsService {
     return savedProject.id;
   }
 
-  async addUserToProject(projectId: number, email: string) {
+  /**
+   * Adds a user to a project by their email address.
+   *
+   * @param {number} projectId - The ID of the project to which the user will be added.
+   * @param {string} email - The email address of the user to be added to the project.
+   * @returns {Promise<number>} A promise that resolves to the ID of the updated project.
+   *
+   * @description This method retrieves the project by its ID, checks if the user exists,
+   * and adds the user to the project's `userAccounts` relation if they are not already included.
+   * Updates the project's `updatedAt` timestamp and saves the changes to the database.
+   *
+   * @throws {NotFoundException} If the project is not found or has been marked as deleted.
+   * @throws {NotFoundException} If the user associated with the given email is not found.
+   *
+   */
+  async addUserToProject(projectId: number, email: string): Promise<number> {
     const project = await this.projectRepository.findOne({
       where: { id: projectId },
       relations: ['userAccounts'],

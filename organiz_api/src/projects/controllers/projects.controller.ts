@@ -95,6 +95,15 @@ export class ProjectsController {
     return this.projectsService.findOneById(request.user.id, id);
   }
 
+  /**
+   * Adds a user to a project by their email address.
+   *
+   * @param {any} request - The incoming HTTP request object, containing user authentication and metadata.
+   * @param {number} id - The ID of the project to which the user will be added.
+   * @param {string} email - The email address of the user to be added to the project.
+   * @returns {Promise<number>} A promise that resolves to the ID of the project after the user is added.
+   *
+   */
   @Patch(':id')
   @ApiBearerAuth()
   @ApiCreatedResponse({ description: 'Modify one project by id' })

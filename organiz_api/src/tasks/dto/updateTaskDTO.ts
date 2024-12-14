@@ -1,24 +1,22 @@
 import {
   IsInt,
-  IsNotEmpty,
   MaxLength,
-  MinLength,
+  IsOptional,
+  IsString,
 } from '@nestjs/class-validator';
-import { IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 /**
- * Data Transfer Object for creating a task.
+ * Data Transfer Object for updating a task.
  */
-export class CreateTaskDTO {
-  @IsNotEmpty()
+export class UpdateTaskDTO {
+  @IsOptional()
   @IsString()
-  @MinLength(1)
   @MaxLength(35)
   @ApiProperty({
     description: 'Task title',
     type: String,
-    required: true,
+    required: false,
     default: 'Task title',
     maxLength: 35,
   })
@@ -30,17 +28,17 @@ export class CreateTaskDTO {
     description: 'Task description',
     type: String,
     required: false,
-    default: 'Task description',
+    default: 'Task title',
   })
   description: string;
 
+  @IsOptional()
   @IsInt()
-  @IsNotEmpty()
   @ApiProperty({
-    description: 'Project id',
+    description: 'Status id',
     type: Number,
-    required: true,
-    default: 1,
+    required: false,
+    default: 2,
   })
-  projectId: number;
+  statusId: number;
 }
