@@ -1,7 +1,7 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from '../entities/task.entity';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { CreateTaskDTO } from '../dto/createTaskDTO';
 import { ProjectsService } from '../../projects/services/projects.service';
 import { Project } from '../../projects/entities/project.entity';
@@ -48,13 +48,45 @@ export class TasksService {
     return savedTask.id;
   }
 
-  async getById(userId: number, id: number): Promise<Task> {
+  async findById(id: number): Promise<Task> {
     const task: Task = await this.taskRepository.findOneBy({ id: id });
 
     if (!task || task.deletedAt !== null) {
+      this.logger.error(`Task with id ${id} not found`);
       throw new NotFoundException(`Task with id ${id} not found`);
     }
-
     return task;
+  }
+
+  async findAll(
+    userId: number,
+    projectId?: number,
+    onlyMy?: boolean,
+  ): Promise<Task[]> {
+    const query = this.taskRepository
+      .createQueryBuilder('task')
+      .leftJoin('task.project', 'project')
+      .leftJoin('project.userAccounts', 'userAccount')
+      .leftJoinAndSelect('project.status', 'status')
+      .leftJoinAndSelect('project.categories', 'categories')
+      .andWhere(
+        new Brackets((qb) => {
+          qb.where('project.owner = :userId', { userId }).orWhere(
+            'userAccount.id = :userId',
+            { userId },
+          );
+        }),
+      )
+      .andWhere('project.deleted_at IS NULL');
+
+    if (projectId) {
+      query.andWhere('project.id = :projectId', { projectId });
+    }
+
+    if (onlyMy) {
+      query.andWhere('task.assigned_user_id = :userId', { userId });
+    }
+
+    return await query.getMany();
   }
 }
