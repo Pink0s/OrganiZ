@@ -40,5 +40,16 @@ export class StatusesController {
     return this.statusesService.findOne(id);
   }
 
-  
+  @Put(':id')
+  @ApiBearerAuth()
+  @ApiCreatedResponse({ description: 'Update a status' })
+  @HttpCode(HttpStatus.OK)
+  async updateStatus(
+    @Req() request: Request,
+    @Param('id') id: number,
+    @Body() updateStatusDTO: UpdateStatusDTO,
+  ) {
+    this.logger.log(`${request.method} ${request.url}`);
+    return this.statusesService.update(id, updateStatusDTO.name);
+  }
 }

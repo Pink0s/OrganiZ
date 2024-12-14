@@ -40,4 +40,21 @@ export class StatusesService {
 
     return status;
   }
+
+  async update(id: number, name: string) {
+    const actualStatus: Status = await this.findOne(id);
+
+    const isStatusExists: boolean = await this.statusRepository.exists({
+      where: { name: name },
+    });
+
+    if (isStatusExists) {
+      throw new ConflictException(`Status ${name} already exists`);
+    }
+
+    actualStatus.name = name;
+    actualStatus.updatedAt = new Date();
+
+    return await this.statusRepository.save(actualStatus);
+  }
 }
