@@ -2,25 +2,32 @@ import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
-  Entity, JoinColumn,
+  Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn
-} from "typeorm";
+  UpdateDateColumn,
+} from 'typeorm';
 import { UserAccount } from '../../userAccounts/entities/userAccount.entity';
 import { Category } from '../../categories/entities/category.entity';
 import { Status } from '../../statuses/entities/status.entity';
 import { Task } from '../../tasks/entities/task.entity';
 
+/**
+ * Represents the Project entity in the database.
+ *
+ * @entity
+ * Maps to the `projects` table in the database.
+ */
 @Entity('projects')
 export class Project {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column({ type: 'varchar', length: 55, unique: true, nullable: false })
+  @Column({ type: 'varchar', length: 55, nullable: false })
   name: string;
 
   @Column({ type: 'text', unique: false, nullable: true })
@@ -76,4 +83,18 @@ export class Project {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
+
+  constructor(
+    name: string,
+    description: string | undefined,
+    owner: UserAccount,
+    status: Status,
+    categories: Category[] | undefined,
+  ) {
+    this.name = name;
+    this.description = description;
+    this.owner = owner;
+    this.status = status;
+    this.categories = categories;
+  }
 }

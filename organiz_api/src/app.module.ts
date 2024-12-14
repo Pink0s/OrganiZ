@@ -4,6 +4,7 @@ import { typeormConfig } from './configurations/typeormConfig';
 import { UserAccountsModule } from './userAccounts/userAccounts.module';
 import { CategoriesModule } from './categories/categories.module';
 import { StatusesModule } from './statuses/statuses.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { StatusesModule } from './statuses/statuses.module';
     UserAccountsModule,
     CategoriesModule,
     StatusesModule,
+    ProjectsModule,
   ],
   controllers: [],
   providers: [],
