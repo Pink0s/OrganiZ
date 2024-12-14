@@ -2,6 +2,9 @@ import { IsString } from 'class-validator';
 import { IsNotEmpty, MaxLength, MinLength } from '@nestjs/class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
+/**
+ * Data Transfer Object for creating a status.
+ */
 export class CreateStatusDTO {
   @IsString()
   @IsNotEmpty()

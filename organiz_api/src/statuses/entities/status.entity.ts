@@ -10,6 +10,12 @@ import {
 import { Task } from '../../tasks/entities/task.entity';
 import { Project } from '../../projects/entities/project.entity';
 
+/**
+ * Represents the Status entity in the database.
+ *
+ * @entity
+ * This entity maps to the `statuses` table in the database.
+ */
 @Entity('statuses')
 export class Status {
   constructor(name: string) {
