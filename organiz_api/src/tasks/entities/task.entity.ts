@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Status } from '../../statuses/entities/status.entity';
 import { Project } from '../../projects/entities/project.entity';
+import { UserAccount } from '../../userAccounts/entities/userAccount.entity';
 
 @Entity('tasks')
 export class Task {
@@ -30,6 +31,14 @@ export class Task {
   @JoinColumn({ name: 'project_id' })
   project: Project;
 
+  @ManyToOne(
+    () => UserAccount,
+    (userAccount: UserAccount) => userAccount.id,
+    {},
+  )
+  @JoinColumn({ name: 'assigned_user_id' })
+  assignedUser: UserAccount;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
@@ -44,10 +53,12 @@ export class Task {
     description: string | undefined,
     status: Status,
     project: Project,
+    user: UserAccount,
   ) {
     this.name = name;
     this.description = description;
     this.status = status;
     this.project = project;
+    this.assignedUser = user;
   }
 }

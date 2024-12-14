@@ -16,7 +16,7 @@ export class CategoriesController {
    *
    * @param {CreateCategoryDTO} createCategoryDTO - The DTO containing the name of the category to be created.
    * @param {Request} request - The incoming HTTP request object.
-   * @returns {Promise<object>} A promise that resolves to an object containing the ID of the created category.
+   * @returns {Promise<number>} A promise that resolves to an object containing the ID of the created category.
    *
    * @description Logs the request details, creates a new category using the service, and returns its ID.
    */
@@ -27,14 +27,14 @@ export class CategoriesController {
   async createCategory(
     @Body() createCategoryDTO: CreateCategoryDTO,
     @Req() request: Request,
-  ): Promise<object> {
+  ): Promise<number> {
     this.logger.log(`${request.method} ${request.url}`);
 
     const categoryId: number = await this.categoriesService.create(
       createCategoryDTO.name,
     );
     this.logger.log(`Category ${createCategoryDTO.name} created`);
-    return { id: categoryId };
+    return categoryId;
   }
 
   /**
