@@ -13,6 +13,7 @@ import { CreateCategoryPage } from './pages/categories/CreateCategoryPage.tsx';
 import { UpdateCategoryPage } from './pages/categories/UpdateCategoryPage.tsx';
 import ProjectsPage from './pages/projects/index.tsx';
 import { CreateProjectPage } from './pages/projects/CreateProjectPage.tsx';
+import { ProjectDetailsPage } from './pages/projects/ProjectDetailsPage.tsx';
 
 const queryClient = new QueryClient()
 
@@ -30,7 +31,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route path="/categories/:categoryId" element={<ProtectedRoute children={<UpdateCategoryPage/>}/>}/>
                   <Route path="/projects" element={<ProtectedRoute children={<ProjectsPage />}/>}/>
                   <Route path="/projects/create" element={<ProtectedRoute children={<CreateProjectPage />}/>}/>
-
+                  <Route path="/projects/:projectId" element={<ProtectedRoute children={<ProjectDetailsPage />}/>}/>
               </Routes>
           </BrowserRouter>
       </UserProvider>

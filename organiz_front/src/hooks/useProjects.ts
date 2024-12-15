@@ -55,7 +55,7 @@ export const useCreateProject = () => {
         initialValues: {
             name: '',
             description: '',
-            categories: [] as number[], // Initialize categories as an empty array
+            categories: [] as number[],
         },
         validationSchema: Yup.object({
             name: Yup
@@ -72,7 +72,7 @@ export const useCreateProject = () => {
             const newProject: ICreateProject = {
                 name: values.name,
                 description: values.description,
-                categories: values.categories, // Include selected categories
+                categories: values.categories,
             };
 
             const data: ICreateProjectAPI = {
@@ -91,3 +91,15 @@ export const useCreateProject = () => {
         useCategoriesHooks
     };
 };
+
+export const useProject = ({id}: {id: string}) => {
+    const {token} = useAuth()
+    const { data, isError, error, isLoading, isSuccess } = useQuery(
+        {
+            queryKey: ['project', id],
+            queryFn: () => projectsService.findOneByIdAPI({id: id, token: token!!})
+        }
+    );
+    
+    return {data, isError, error, isLoading, isSuccess};
+}
