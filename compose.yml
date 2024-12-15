@@ -1,5 +1,15 @@
 ---
 services:
+  front:
+    build:
+      context: organiz_front
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 80:80
+    networks:
+      - backend_network
   api:
     build:
       context: organiz_api
