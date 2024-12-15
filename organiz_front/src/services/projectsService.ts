@@ -1,9 +1,20 @@
+import ICreateProjectAPI from "../interfaces/ICreateProjectAPI";
 import IFindAllProjectsAPI from "../interfaces/IFindAllProjectsAPI";
 import IProject from "../interfaces/IProject";
 
 const URL = `${import.meta.env.VITE_API_BASE_URL}/api/v1/projects`
 
-const createAPI = () => {}
+const createProjectAPI = (values: ICreateProjectAPI) => {
+    return fetch(URL, {
+        method: "POST",
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${values.token}`
+        },
+        body: JSON.stringify(values.newProject)
+    })
+}
 
 const findAllProjectsAPI = async (values: IFindAllProjectsAPI): Promise<IProject[]> => {
     
@@ -31,7 +42,7 @@ const deleteByIdAPI = () => {}
 const AddUserAPI = () => {}
 
 export default {
-    createAPI,
+    createProjectAPI,
     findAllProjectsAPI,
     findOneByIdAPI,
     udpateByIdAPI,

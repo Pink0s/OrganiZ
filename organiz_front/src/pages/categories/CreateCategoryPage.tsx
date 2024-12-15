@@ -5,7 +5,7 @@ import { StyledTitle } from "../../components/StyledTitle"
 import { StyledInput } from "../../components/StyledInput"
 
 export const CreateCategoryPage = () => {
-    const {formik, isError, errorContent} = useCreateCategory()
+  const {formik, isError, errorContent} = useCreateCategory()
     
   return (
     <>
