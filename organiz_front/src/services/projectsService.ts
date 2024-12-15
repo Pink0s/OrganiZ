@@ -1,4 +1,5 @@
 import ICreateProjectAPI from "../interfaces/ICreateProjectAPI";
+import IDeleteProjectByIdAPI from "../interfaces/IDeleteProjectByIdAPI";
 import IFindAllProjectsAPI from "../interfaces/IFindAllProjectsAPI";
 import IFindOneByIdAPI from "../interfaces/IFindOneByIdAPI";
 import IProject from "../interfaces/IProject";
@@ -52,7 +53,18 @@ const findOneByIdAPI = async (values: IFindOneByIdAPI): Promise<IProject> => {
 }
 
 const udpateByIdAPI = () => {}
-const deleteByIdAPI = () => {}
+
+const deleteProjectByIdAPI = (values: IDeleteProjectByIdAPI) => {
+    return fetch(`${URL}/${values.id}`,{
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${values.token}`
+        }
+    })
+}
+
 const AddUserAPI = () => {}
 
 export default {
@@ -60,6 +72,6 @@ export default {
     findAllProjectsAPI,
     findOneByIdAPI,
     udpateByIdAPI,
-    deleteByIdAPI,
+    deleteProjectByIdAPI,
     AddUserAPI
 }

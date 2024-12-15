@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import Header from "../../components/Header";
-import { useProject } from "../../hooks/useProjects";
+import { useDeleteProject, useProject } from "../../hooks/useProjects";
 import { LoaderPage } from "../common/LoaderPage";
 
 interface DetailsRowProps {
@@ -9,19 +9,24 @@ interface DetailsRowProps {
 }
 
 const DetailsRow: React.FC<DetailsRowProps> = ({ label, value }) => {
-  return (
-    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-      <dt className="text-sm font-medium text-gray-900">{label}</dt>
-      <dd className="mt-1 flex flex-wrap gap-2 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
-        {value}
-      </dd>
-    </div>
-  );
-};
+    return (
+        <>
+            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+            <dt className="text-sm font-medium text-gray-900">{label}</dt>
+            <dd className="mt-1 flex flex-wrap gap-2 text-sm text-gray-700 sm:col-span-2 sm:mt-0">
+            {value}
+            </dd>
+      </div>
+        </>
+      
+    );
+  };
+  
 
 export const ProjectDetailsPage = () => {
   const { projectId } = useParams();
   const { data, isError, error, isLoading } = useProject({ id: projectId!! });
+  const { deleteProject, isError: deleteError, error: deleteErrorMessages } = useDeleteProject();
 
   if (isLoading) {
     return <LoaderPage />;
@@ -39,6 +44,12 @@ export const ProjectDetailsPage = () => {
       </>
     );
   }
+
+  const handleDelete = () => {
+    if (projectId) {
+      deleteProject(projectId);
+    }
+  };
 
   return (
     <>
@@ -70,6 +81,24 @@ export const ProjectDetailsPage = () => {
             <DetailsRow label="Updated at" value={data?.updatedAt} />
           </dl>
         </div>
+        <div className="mt-6">
+          <button
+            onClick={handleDelete}
+            className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          >
+            Delete Project
+          </button>
+        </div>
+        {deleteError && (
+          <div className="mt-4 p-4 rounded-md bg-red-50 border border-red-200">
+            <p className="text-sm text-red-600">Error deleting project:</p>
+            <ul className="mt-2 list-disc pl-5 text-sm text-red-600">
+              {deleteErrorMessages.map((msg, index) => (
+                <li key={index}>{msg}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </>
   );

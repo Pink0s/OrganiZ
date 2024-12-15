@@ -9,6 +9,7 @@ import ICreateProjectAPI from "../interfaces/ICreateProjectAPI";
 import { useFormik } from "formik";
 import ICreateProject from "../interfaces/ICreateProject";
 import { useCategories } from "./useCategories";
+import IDeleteProjectByIdAPI from "../interfaces/IDeleteProjectByIdAPI";
 
 export const useProjects = ({category}: {category?: string}) => {
     const {token} = useAuth()
@@ -103,3 +104,38 @@ export const useProject = ({id}: {id: string}) => {
     
     return {data, isError, error, isLoading, isSuccess};
 }
+
+export const useDeleteProject = () => {
+    const { token } = useAuth();
+    const [error, setError] = React.useState<string[]>([]);
+    const [isError, setIsError] = React.useState(false);
+    const [success, setIsSuccess] = React.useState(false);
+    const navigate = useNavigate();
+    const mutation = useMutation({
+        mutationFn: (request: IDeleteProjectByIdAPI) => {
+            return projectsService.deleteProjectByIdAPI(request);
+        },onSuccess: (data) => {
+            if(data.status === 200) {
+                setIsSuccess(true);
+                navigate("/projects")
+            } else {
+                setError(["Unexpected error"])
+                setIsError(true)
+                setTimeout(() => {
+                    setIsError(false)
+                    setError([])
+                }, 6000)
+            }
+        },}
+    
+    )
+  
+    const deleteProject = (projectId: string) => {
+        mutation.mutate({
+            token: token!!, 
+            id: projectId
+        });
+    }
+  
+    return {deleteProject, success, error, isError} 
+  }
