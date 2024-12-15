@@ -9,6 +9,7 @@ import { UserProvider } from './contexts/authContext.tsx';
 import ProtectedRoute from './utils/ProtectedRoute.tsx';
 import { Register } from './pages/authentication/Register.tsx';
 import CategoriesPage from './pages/categories/index.tsx';
+import { CreateCategoryPage } from './pages/categories/CreateCategoryPage.tsx';
 
 const queryClient = new QueryClient()
 
@@ -22,6 +23,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/categories" element={<ProtectedRoute children={<CategoriesPage />}/>}/>
+                  <Route path="/categories/create" element={<ProtectedRoute children={<CreateCategoryPage />}/>}/>
               </Routes>
           </BrowserRouter>
       </UserProvider>
