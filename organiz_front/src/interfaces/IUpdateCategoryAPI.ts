@@ -2,6 +2,6 @@ import IUpdatedCategory from "./IUpdatedCategory";
 
 export default interface IUpdateCategoryAPI {
     token: string;
-    id: number
+    id: string;
     modifiedCategory: IUpdatedCategory;    
 }

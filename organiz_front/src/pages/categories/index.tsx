@@ -14,7 +14,7 @@ const categoriesFields = [
 const TableHeader = () => {
   return <thead>
     <tr>
-      {categoriesFields.map((item: {name: string}) => <th scope="col" className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">{item.name}</th>)}
+      {categoriesFields.map((item: {name: string}) => <th key={item.name} scope="col" className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wide text-gray-500">{item.name}</th>)}
       <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-0">
         <span className="sr-only">Edit</span>
       </th>
@@ -74,7 +74,7 @@ const CategoriesPage = () => {
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{data.createdAt}</td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{data.updatedAt}</td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <Link to={`categories/${data.id}`} className="text-indigo-600 hover:text-indigo-900">
+                      <Link to={`/categories/${data.id}`} className="text-indigo-600 hover:text-indigo-900">
                         Edit<span className="sr-only">, {data.id}</span>
                       </Link>
                     </td>
