@@ -7,6 +7,7 @@ import {Login} from "./pages/authentication/Login.tsx";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UserProvider } from './contexts/authContext.tsx';
 import ProtectedRoute from './utils/ProtectedRoute.tsx';
+import { Register } from './pages/authentication/Register.tsx';
 
 const queryClient = new QueryClient()
 
@@ -16,9 +17,9 @@ createRoot(document.getElementById('root')!).render(
       <UserProvider>
           <BrowserRouter>
               <Routes>
-
                   <Route path="/" element={<ProtectedRoute children={<Home />}/>} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
               </Routes>
           </BrowserRouter>
       </UserProvider>

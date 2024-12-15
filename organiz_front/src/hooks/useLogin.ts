@@ -21,8 +21,6 @@ export const useLogin = () => {
         onSuccess: async (data) => {
             if (data.status === 200) {
                 const result = await data.json();
-                console.log(result);
-                console.log(result.token)
                 login!(result.token);
                 await navigate("/")
             } else {
