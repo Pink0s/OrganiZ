@@ -86,13 +86,13 @@ export class ProjectsService {
   }
 
   /**
-   * Retrieves all projects associated with a user, optionally filtered by status name.
+   * Retrieves all projects associated with a user, optionally filtered by category name.
    *
    * @param {number} userId - The ID of the user.
-   * @param {string} [statusName] - Optional status name filter.
+   * @param {string} [category] - Optional category name filter.
    * @returns {Promise<Project[]>} A promise that resolves to an array of projects.
    */
-  async findAll(userId: number, statusName?: string): Promise<Project[]> {
+  async findAll(userId: number, category?: string): Promise<Project[]> {
     const query = this.projectRepository
       .createQueryBuilder('project')
       .leftJoin('project.userAccounts', 'userAccount')
@@ -108,8 +108,8 @@ export class ProjectsService {
       )
       .andWhere('project.deleted_at IS NULL');
 
-    if (statusName) {
-      query.andWhere('status.name = :statusName', { statusName });
+    if (category) {
+      query.andWhere('categories.name = :category', { category });
     }
 
     return await query.getMany();
