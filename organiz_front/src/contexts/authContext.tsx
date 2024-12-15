@@ -27,7 +27,7 @@ export const UserProvider = ({ children }: IUserProvider) => {
             }
     
             setUser(user);
-            setToken(token)
+            setToken(token_payload)
             setIsLogin(true)
         }
         setIsReady(true);    
