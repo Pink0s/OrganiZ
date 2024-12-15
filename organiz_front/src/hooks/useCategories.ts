@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import categoriesService from "../services/categoriesService";
 import { useAuth } from "./useAuth";
 import React from "react";
@@ -10,6 +10,7 @@ import * as Yup from "yup";
 import ICreateCategory from "../interfaces/ICreateCategory";
 import IUpdateCategoryAPI from "../interfaces/IUpdateCategoryAPI";
 import IUpdatedCategory from "../interfaces/IUpdatedCategory";
+import IDeleteCategoryAPI from "../interfaces/IDeleteCategoryAPI";
 
 export const useCategories = () => {
     const {token} = useAuth();
@@ -167,3 +168,37 @@ export const useModifyCategory = (categoryId: string, category: any, success: bo
 
 
 
+export const useDeleteCategory = () => {
+    const { token } = useAuth();
+    const [error, setError] = React.useState<string[]>([]);
+    const [isError, setIsError] = React.useState(false);
+    const [success, setIsSuccess] = React.useState(false);
+    const queryClient = useQueryClient()
+    const mutation = useMutation({
+        mutationFn: (request: IDeleteCategoryAPI) => {
+            return categoriesService.deleteById(request);
+        },onSuccess: (data) => {
+            if(data.status === 200) {
+                setIsSuccess(true);
+                queryClient.invalidateQueries({ queryKey: ['categories'] })
+            } else {
+                setError(["Unexpected error"])
+                setIsError(true)
+                setTimeout(() => {
+                    setIsError(false)
+                    setError([])
+                }, 6000)
+            }
+        },}
+    
+    )
+  
+    const deleteCategory = (categoryId: string) => {
+        mutation.mutate({
+            token: token!!, id: categoryId
+        });
+    }
+  
+    return {deleteCategory, success, error, isError} 
+  }
+  

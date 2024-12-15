@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import Header from "../../components/Header";
-import { useCategories } from "../../hooks/useCategories";
+import { useCategories, useDeleteCategory } from "../../hooks/useCategories";
 import { LoaderPage } from "../common/LoaderPage";
 import ICategory from "../../interfaces/ICategory";
 
@@ -18,13 +18,16 @@ const TableHeader = () => {
       <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-0">
         <span className="sr-only">Edit</span>
       </th>
+      <th scope="col" className="relative py-3 pl-3 pr-4 sm:pr-0">
+        <span className="sr-only">Delete</span>
+      </th>
     </tr>
   </thead>
 }
 
 const CategoriesPage = () => {
   const {data, isError, error, isLoading, isSuccess} = useCategories()
-
+  const useDeleteCategoryHook = useDeleteCategory()
   if(isLoading) {
     return <LoaderPage/>
   }
@@ -77,6 +80,11 @@ const CategoriesPage = () => {
                       <Link to={`/categories/${data.id}`} className="text-indigo-600 hover:text-indigo-900">
                         Edit<span className="sr-only">, {data.id}</span>
                       </Link>
+                    </td>
+                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                      <button onClick={() => useDeleteCategoryHook.deleteCategory(data.id.toString())} className="text-indigo-600 hover:text-indigo-900">
+                        Delete<span className="sr-only">, {data.id}</span>
+                      </button>
                     </td>
                   </tr>
                 ))}
