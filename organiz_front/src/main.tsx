@@ -11,6 +11,7 @@ import { Register } from './pages/authentication/Register.tsx';
 import CategoriesPage from './pages/categories/index.tsx';
 import { CreateCategoryPage } from './pages/categories/CreateCategoryPage.tsx';
 import { UpdateCategoryPage } from './pages/categories/UpdateCategoryPage.tsx';
+import ProjectsPage from './pages/projects/index.tsx';
 
 const queryClient = new QueryClient()
 
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')!).render(
                   <Route path="/categories" element={<ProtectedRoute children={<CategoriesPage />}/>}/>
                   <Route path="/categories/create" element={<ProtectedRoute children={<CreateCategoryPage />}/>}/>
                   <Route path="/categories/:categoryId" element={<ProtectedRoute children={<UpdateCategoryPage/>}/>}/>
+                  <Route path="/projects" element={<ProtectedRoute children={<ProjectsPage />}/>}/>
               </Routes>
           </BrowserRouter>
       </UserProvider>

@@ -7,7 +7,8 @@ import { useAuth } from '../hooks/useAuth'
 
 const navigation = [
   { name: 'Home', destination: '/' },
-  { name: 'Categories', destination: '/categories' }
+  { name: 'Categories', destination: '/categories' },
+  { name: 'Projects', destination: '/projects' }
 ]
 
 function Header() {
