@@ -20,7 +20,7 @@ function Header() {
         <div className="flex flex-1">
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <Link to={item.destination} id={item.name} className="text-sm/6 font-semibold text-gray-900">
+              <Link key={`${item.name}`} to={item.destination} id={item.name} className="text-sm/6 font-semibold text-gray-900">
                 {item.name}
               </Link>
             ))}

@@ -1,3 +1,4 @@
+import ICategory from "../interfaces/ICategory"
 import ICreateCategoryAPI from "../interfaces/ICreateCategoryAPI"
 import IDeleteCategoryAPI from "../interfaces/IDeleteCategoryAPI"
 import IFindAllCategoriesAPI from "../interfaces/IFindAllCategoriesAPI"
@@ -18,8 +19,8 @@ const create = ({token, newCategory} : ICreateCategoryAPI) => {
     })
 }
 
-const findAll = ({token}: IFindAllCategoriesAPI) => {
-    return fetch(URL, {
+const findAll = async ({token}: IFindAllCategoriesAPI): Promise<ICategory[]> => {
+    const response = await fetch(URL, {
         method: "GET",
         headers: {
             'Accept': 'application/json',
@@ -27,10 +28,12 @@ const findAll = ({token}: IFindAllCategoriesAPI) => {
             'Authorization': `Bearer ${token}`
         }
     })
+
+    return response.json()
 }
 
-const findOneById = ({token, id}: IFindOneCategoryByIdAPI) => {
-    return fetch(`${URL}/${id}`, {
+const findOneById = async ({token, id}: IFindOneCategoryByIdAPI): Promise<ICategory> => {
+    const response = await fetch(`${URL}/${id}`, {
         method: "GET",
         headers: {
             'Accept': 'application/json',
@@ -38,6 +41,8 @@ const findOneById = ({token, id}: IFindOneCategoryByIdAPI) => {
             'Authorization': `Bearer ${token}`
         }
     })
+
+    return response.json()
 }
 
 const modifyById = ({token, id, modifiedCategory}: IUpdateCategoryAPI) => {
