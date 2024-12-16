@@ -101,6 +101,12 @@ export const ProjectDetailsPage = () => {
           >
             Modify Project
           </Link>
+          <Link
+            to={`/projects/addUser/${projectId}`}
+            className="inline-flex items-center rounded-md bg-orange-400 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          >
+            add user
+          </Link>
         </div>
         {deleteError && (
           <div className="mt-4 p-4 rounded-md bg-red-50 border border-red-200">

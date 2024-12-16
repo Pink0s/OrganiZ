@@ -15,6 +15,7 @@ import ProjectsPage from './pages/projects/index.tsx'
 import { CreateProjectPage } from './pages/projects/CreateProjectPage.tsx'
 import { ProjectDetailsPage } from './pages/projects/ProjectDetailsPage.tsx'
 import { UpdateProjectPage } from './pages/projects/UpdateProjectPage.tsx'
+import { AddUserToProjectPage } from './pages/projects/AddUserToProjectPage.tsx'
 
 const queryClient = new QueryClient()
 
@@ -50,6 +51,10 @@ createRoot(document.getElementById('root')!).render(
             <Route
               path="/projects/update/:projectId"
               element={<ProtectedRoute children={<UpdateProjectPage />} />}
+            />
+            <Route
+              path="/projects/addUser/:projectId"
+              element={<ProtectedRoute children={<AddUserToProjectPage />} />}
             />
             <Route
               path="/projects/:projectId"

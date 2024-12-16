@@ -260,14 +260,16 @@ export class ProjectsService {
       relations: ['userAccounts'],
     });
 
-    console.log(JSON.stringify(project));
-
     if (!project || project.deletedAt !== null) {
       this.logger.error(`Project id : ${projectId} not found`);
       throw new NotFoundException('Project not found');
     }
 
     const newUser = await this.userAccountService.getByEmail(email);
+
+    if(!newUser) {
+      throw new NotFoundException("User not found");
+    }
 
     if (!project.userAccounts.includes(newUser)) {
       project.userAccounts.push(newUser);

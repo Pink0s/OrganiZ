@@ -1,3 +1,4 @@
+import AddUserToProjectAPI from '../interfaces/IAddUserToProjectAPI'
 import ICreateProjectAPI from '../interfaces/ICreateProjectAPI'
 import IDeleteProjectByIdAPI from '../interfaces/IDeleteProjectByIdAPI'
 import IFindAllProjectsAPI from '../interfaces/IFindAllProjectsAPI'
@@ -79,7 +80,16 @@ const deleteProjectByIdAPI = (values: IDeleteProjectByIdAPI) => {
   })
 }
 
-const AddUserAPI = () => {}
+const addUserToProjectAPI = (values: AddUserToProjectAPI) => {
+    return fetch(`${URL}/${values.projectId}?email=${values.email}`, {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${values.token}`,
+        }
+    })
+}
 
 export default {
   createProjectAPI,
@@ -87,5 +97,5 @@ export default {
   findOneByIdAPI,
   updateByIdAPI,
   deleteProjectByIdAPI,
-  AddUserAPI,
+  addUserToProjectAPI,
 }

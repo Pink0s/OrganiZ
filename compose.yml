@@ -11,6 +11,7 @@ services:
       - 80:80
     networks:
       - backend_network
+    restart: always
   api:
     build:
       context: organiz_api
