@@ -1,13 +1,15 @@
-import Header from "../../components/Header"
-import { Error } from "../../components/Error"
-import { StyledTitle } from "../../components/StyledTitle"
-import { StyledInput } from "../../components/StyledInput"
-import { useParams } from "react-router"
-import { useCreateTask } from "../../hooks/useTasks"
+import Header from '../../components/Header'
+import { Error } from '../../components/Error'
+import { StyledTitle } from '../../components/StyledTitle'
+import { StyledInput } from '../../components/StyledInput'
+import { useParams } from 'react-router'
+import { useCreateTask } from '../../hooks/useTasks'
 
 export const CreateTaskPage = () => {
-    const {projectId} = useParams();
-    const { formik, isError, errorContent } = useCreateTask({projectId: Number(projectId!!)})
+  const { projectId } = useParams()
+  const { formik, isError, errorContent } = useCreateTask({
+    projectId: Number(projectId!!),
+  })
 
   return (
     <>

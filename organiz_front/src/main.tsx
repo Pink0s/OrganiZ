@@ -17,6 +17,7 @@ import { ProjectDetailsPage } from './pages/projects/ProjectDetailsPage.tsx'
 import { UpdateProjectPage } from './pages/projects/UpdateProjectPage.tsx'
 import { AddUserToProjectPage } from './pages/projects/AddUserToProjectPage.tsx'
 import { CreateTaskPage } from './pages/tasks/CreateTaskPage.tsx'
+import { ModifyTaskPage } from './pages/tasks/ModifyTaskPage.tsx'
 
 const queryClient = new QueryClient()
 
@@ -64,6 +65,10 @@ createRoot(document.getElementById('root')!).render(
             <Route
               path="/tasks/create/:projectId"
               element={<ProtectedRoute children={<CreateTaskPage />} />}
+            />
+            <Route
+              path="/tasks/:taskId"
+              element={<ProtectedRoute children={<ModifyTaskPage />} />}
             />
           </Routes>
         </BrowserRouter>

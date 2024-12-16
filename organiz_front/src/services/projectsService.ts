@@ -81,14 +81,14 @@ const deleteProjectByIdAPI = (values: IDeleteProjectByIdAPI) => {
 }
 
 const addUserToProjectAPI = (values: AddUserToProjectAPI) => {
-    return fetch(`${URL}/${values.projectId}?email=${values.email}`, {
-        method: 'PATCH',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${values.token}`,
-        }
-    })
+  return fetch(`${URL}/${values.projectId}?email=${values.email}`, {
+    method: 'PATCH',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${values.token}`,
+    },
+  })
 }
 
 export default {

@@ -1,4 +1,4 @@
 export default interface IFindAllTasksAPI {
-    token: string;
-    projectId: string;
+  token: string
+  projectId: string
 }

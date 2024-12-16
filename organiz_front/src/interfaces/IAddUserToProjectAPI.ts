@@ -1,5 +1,5 @@
 export default interface AddUserToProjectAPI {
-    token: string;
-    email: string
-    projectId: string
+  token: string
+  email: string
+  projectId: string
 }

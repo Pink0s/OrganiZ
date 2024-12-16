@@ -1,12 +1,12 @@
-import { Link, useParams } from "react-router";
-import Header from "../../components/Header";
-import { useDeleteProject, useProject } from "../../hooks/useProjects";
-import { useTasks } from "../../hooks/useTasks"; // Import the useTasks hook
-import { LoaderPage } from "../common/LoaderPage";
+import { Link, useNavigate, useParams } from 'react-router'
+import Header from '../../components/Header'
+import { useDeleteProject, useProject } from '../../hooks/useProjects'
+import { useTasks } from '../../hooks/useTasks'
+import { LoaderPage } from '../common/LoaderPage'
 
 interface DetailsRowProps {
-  label: string;
-  value: React.ReactNode;
+  label: string
+  value: React.ReactNode
 }
 
 const DetailsRow: React.FC<DetailsRowProps> = ({ label, value }) => {
@@ -17,25 +17,26 @@ const DetailsRow: React.FC<DetailsRowProps> = ({ label, value }) => {
         {value}
       </dd>
     </div>
-  );
-};
+  )
+}
 
 export const ProjectDetailsPage = () => {
-  const { projectId } = useParams();
-  const { data, isError, error, isLoading } = useProject({ id: projectId!! });
+  const navigate = useNavigate()
+  const { projectId } = useParams()
+  const { data, isError, error, isLoading } = useProject({ id: projectId!! })
   const {
     data: tasks,
     isError: isTasksError,
     isLoading: isTasksLoading,
-  } = useTasks({ projectId: projectId!! }); // Fetch tasks for the project
+  } = useTasks({ projectId: projectId!! })
   const {
     deleteProject,
     isError: deleteError,
     error: deleteErrorMessages,
-  } = useDeleteProject();
+  } = useDeleteProject()
 
   if (isLoading || isTasksLoading) {
-    return <LoaderPage />;
+    return <LoaderPage />
   }
 
   if (isError) {
@@ -48,14 +49,14 @@ export const ProjectDetailsPage = () => {
           </p>
         </div>
       </>
-    );
+    )
   }
 
   const handleDelete = () => {
     if (projectId) {
-      deleteProject(projectId);
+      deleteProject(projectId)
     }
-  };
+  }
 
   return (
     <>
@@ -76,7 +77,7 @@ export const ProjectDetailsPage = () => {
             <DetailsRow label="Description" value={data?.description} />
             <DetailsRow
               label="Status"
-              value={data?.status ? data.status.name : ""}
+              value={data?.status ? data.status.name : ''}
             />
             <DetailsRow
               label="Categories"
@@ -93,7 +94,7 @@ export const ProjectDetailsPage = () => {
             <DetailsRow label="Updated at" value={data?.updatedAt} />
           </dl>
         </div>
-        {(tasks!.length > 0) && (
+        {tasks!.length > 0 && (
           <div className="mt-8">
             <h3 className="text-base font-semibold text-gray-900">Tasks</h3>
             {isTasksError ? (
@@ -102,6 +103,9 @@ export const ProjectDetailsPage = () => {
               <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-4">
                 {tasks!.map((task) => (
                   <div
+                    onClick={() => {
+                      navigate(`/tasks/${task.id}`)
+                    }}
                     key={task.id}
                     className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md"
                   >
@@ -109,13 +113,13 @@ export const ProjectDetailsPage = () => {
                       {task.name}
                     </h4>
                     <p className="mt-2 text-sm text-gray-500">
-                      {task.description || "No description provided."}
+                      {task.description || 'No description provided.'}
                     </p>
                     <span
                       className={`mt-4 inline-block rounded-full px-3 py-1 text-xs font-medium ${
-                        task.status.name === "Completed"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-gray-100 text-gray-800"
+                        task.status.name === 'Completed'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-gray-100 text-gray-800'
                       }`}
                     >
                       {task.status.name}
@@ -127,7 +131,6 @@ export const ProjectDetailsPage = () => {
           </div>
         )}
 
-        {/* Buttons */}
         <div className="mt-6 flex space-x-4">
           <button
             onClick={handleDelete}
@@ -155,7 +158,6 @@ export const ProjectDetailsPage = () => {
           </Link>
         </div>
 
-        {/* Error Handling */}
         {deleteError && (
           <div className="mt-4 p-4 rounded-md bg-red-50 border border-red-200">
             <p className="text-sm text-red-600">Error deleting project:</p>
@@ -168,5 +170,5 @@ export const ProjectDetailsPage = () => {
         )}
       </div>
     </>
-  );
-};
+  )
+}

@@ -216,56 +216,61 @@ export const useUpdateProject = (initialData: any) => {
   }
 }
 
-export const useAddUserToProject = ({projectId}: {projectId: string}) => {
-    const [isError, setIsError] = React.useState(false)
-    const [errorContent, setErrorContent] = React.useState<IError>({
-      errors: [],
-      title: '',
-    })
-    const navigate = useNavigate()
-    const { token } = useAuth()
-  
-    const mutation = useMutation({
-      mutationFn: (values: IAddUserToProjectAPI) => {
-        return projectsService.addUserToProjectAPI(values)
-      },
-      onSuccess: async (data) => {
-        if (data.status === 200) {
-          await navigate(`/projects/${projectId}`)
-        } else {
-          setIsError(true)
-          const result = await data.json()
-          console.log(result)
-          setErrorContent({
-            title: 'Error while creating category',
-            errors: [result.reason],
-          })
-          setTimeout(() => {
-            setIsError(false)
-          }, 6000)
-        }
-      },
-    })
-  
-    const formik = useFormik({
-      initialValues: {
-        email: '',
-      },
-      validationSchema: Yup.object({
-        email: Yup.string().email()
-          .required('email is required')
-          .min(1, 'email must be at least 1 character')
-          .max(35, 'email must be at most 35 characters'),
-      }),
-      onSubmit: (values) => {
-        const addUserToProject: IAddUserToProjectAPI = { email: values.email, token: token!!, projectId: projectId }
-        mutation.mutate(addUserToProject)
-      },
-    })
-  
-    return {
-      formik,
-      isError,
-      errorContent,
-    }
+export const useAddUserToProject = ({ projectId }: { projectId: string }) => {
+  const [isError, setIsError] = React.useState(false)
+  const [errorContent, setErrorContent] = React.useState<IError>({
+    errors: [],
+    title: '',
+  })
+  const navigate = useNavigate()
+  const { token } = useAuth()
+
+  const mutation = useMutation({
+    mutationFn: (values: IAddUserToProjectAPI) => {
+      return projectsService.addUserToProjectAPI(values)
+    },
+    onSuccess: async (data) => {
+      if (data.status === 200) {
+        await navigate(`/projects/${projectId}`)
+      } else {
+        setIsError(true)
+        const result = await data.json()
+        console.log(result)
+        setErrorContent({
+          title: 'Error while creating category',
+          errors: [result.reason],
+        })
+        setTimeout(() => {
+          setIsError(false)
+        }, 6000)
+      }
+    },
+  })
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email()
+        .required('email is required')
+        .min(1, 'email must be at least 1 character')
+        .max(35, 'email must be at most 35 characters'),
+    }),
+    onSubmit: (values) => {
+      const addUserToProject: IAddUserToProjectAPI = {
+        email: values.email,
+        token: token!!,
+        projectId: projectId,
+      }
+      mutation.mutate(addUserToProject)
+    },
+  })
+
+  return {
+    formik,
+    isError,
+    errorContent,
   }
+}
