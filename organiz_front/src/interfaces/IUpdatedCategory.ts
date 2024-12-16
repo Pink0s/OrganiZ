@@ -1,3 +1,3 @@
 export default interface IUpdatedCategory {
-    name: string
+  name: string
 }

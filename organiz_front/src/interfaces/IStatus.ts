@@ -1,6 +1,6 @@
-export default interface ICategory {
-  id: number
+export default interface IStatus {
   name: string
+  id: string
   createdAt: string
   updatedAt: string
 }

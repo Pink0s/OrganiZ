@@ -1,4 +1,4 @@
 export default interface IError {
-    title: string;
-    errors: string[];
-  }
+  title: string
+  errors: string[]
+}

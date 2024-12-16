@@ -1,4 +1,4 @@
 export default interface IDeleteProjectByIdAPI {
-    token: string, 
-    id: string
+  token: string
+  id: string
 }

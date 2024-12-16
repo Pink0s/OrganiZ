@@ -1,5 +1,5 @@
 export default interface ICreateProject {
-    name: string;
-    description?: string;
-    categories?: number[]  
+  name: string
+  description?: string
+  categories?: number[]
 }

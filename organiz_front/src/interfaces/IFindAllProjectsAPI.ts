@@ -1,4 +1,4 @@
 export default interface IFindAllProjectsAPI {
-    category?: string
-    token: string
+  category?: string
+  token: string
 }

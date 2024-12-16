@@ -1,6 +1,6 @@
-import ICreateCategory from "./ICreateCategory";
+import ICreateCategory from './ICreateCategory'
 
 export default interface ICreateCategoryAPI {
-    token: string;
-    newCategory: ICreateCategory;    
+  token: string
+  newCategory: ICreateCategory
 }

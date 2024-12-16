@@ -1,17 +1,13 @@
-import Header from "../../components/Header";
-import { useCreateProject } from "../../hooks/useProjects";
-import ICategory from "../../interfaces/ICategory";
-import { Error } from "../../components/Error";
-import { StyledTitle } from "../../components/StyledTitle";
-import { StyledInput } from "../../components/StyledInput";
+import Header from '../../components/Header'
+import { useCreateProject } from '../../hooks/useProjects'
+import ICategory from '../../interfaces/ICategory'
+import { Error } from '../../components/Error'
+import { StyledTitle } from '../../components/StyledTitle'
+import { StyledInput } from '../../components/StyledInput'
 
 export const CreateProjectPage = () => {
-  const {
-    formik,
-    isError,
-    errorContent,
-    useCategoriesHooks,
-  } = useCreateProject();
+  const { formik, isError, errorContent, useCategoriesHooks } =
+    useCreateProject()
 
   if (isError) {
     return (
@@ -23,14 +19,16 @@ export const CreateProjectPage = () => {
           </p>
         </div>
       </>
-    );
+    )
   }
 
   return (
     <>
       <Header />
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        {isError && <Error title={errorContent.title} errors={errorContent.errors} />}
+        {isError && (
+          <Error title={errorContent.title} errors={errorContent.errors} />
+        )}
         <StyledTitle text="Create a new project" />
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
@@ -50,7 +48,10 @@ export const CreateProjectPage = () => {
             />
 
             <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Description
               </label>
               <textarea
@@ -64,7 +65,10 @@ export const CreateProjectPage = () => {
             </div>
 
             <div>
-              <label htmlFor="categories" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="categories"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Categories
               </label>
               <div className="mt-2 space-y-2">
@@ -75,19 +79,21 @@ export const CreateProjectPage = () => {
                       name="categories"
                       type="checkbox"
                       value={category.id}
-                      checked={formik.values.categories.includes(category.id)} 
+                      checked={formik.values.categories.includes(category.id)}
                       onChange={(e) => {
-                        const checked = e.target.checked;
-                        const value = Number(e.target.value);
+                        const checked = e.target.checked
+                        const value = Number(e.target.value)
 
-                        let newCategories;
+                        let newCategories
                         if (checked) {
-                          newCategories = [...formik.values.categories, value];
+                          newCategories = [...formik.values.categories, value]
                         } else {
-                          newCategories = formik.values.categories.filter((id) => id !== value);
+                          newCategories = formik.values.categories.filter(
+                            (id) => id !== value
+                          )
                         }
 
-                        formik.setFieldValue("categories", newCategories);
+                        formik.setFieldValue('categories', newCategories)
                       }}
                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                     />
@@ -101,7 +107,9 @@ export const CreateProjectPage = () => {
                 ))}
               </div>
               {formik.touched.categories && formik.errors.categories ? (
-                <p className="mt-2 text-sm text-red-600">{formik.errors.categories}</p>
+                <p className="mt-2 text-sm text-red-600">
+                  {formik.errors.categories}
+                </p>
               ) : null}
             </div>
 
@@ -117,5 +125,5 @@ export const CreateProjectPage = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}

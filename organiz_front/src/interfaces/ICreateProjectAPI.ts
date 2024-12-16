@@ -1,6 +1,6 @@
-import ICreateProject from "./ICreateProject";
+import ICreateProject from './ICreateProject'
 
 export default interface ICreateProjectAPI {
-    token: string,
-    newProject: ICreateProject
+  token: string
+  newProject: ICreateProject
 }

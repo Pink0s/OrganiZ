@@ -1,4 +1,4 @@
 export default interface IFindOneByIdAPI {
-    token: string,
-    id: string
+  token: string
+  id: string
 }

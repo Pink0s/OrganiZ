@@ -1,22 +1,22 @@
-import { Link } from "react-router";
-import Header from "../../components/Header";
-import IProject from "../../interfaces/IProject";
-import { useProjects } from "../../hooks/useProjects";
-import { LoaderPage } from "../common/LoaderPage";
-import React from "react";
-import ICategory from "../../interfaces/ICategory";
-import { useCategories } from "../../hooks/useCategories";
-import { useQueryClient } from "@tanstack/react-query";
+import { Link } from 'react-router'
+import Header from '../../components/Header'
+import IProject from '../../interfaces/IProject'
+import { useProjects } from '../../hooks/useProjects'
+import { LoaderPage } from '../common/LoaderPage'
+import React from 'react'
+import ICategory from '../../interfaces/ICategory'
+import { useCategories } from '../../hooks/useCategories'
+import { useQueryClient } from '@tanstack/react-query'
 
 const categoriesFields = [
-  { name: "id" },
-  { name: "name" },
-  { name: "description" },
-  { name: "status" },
-  { name: "categories" },
-  { name: "created_at" },
-  { name: "updated_at" },
-];
+  { name: 'id' },
+  { name: 'name' },
+  { name: 'description' },
+  { name: 'status' },
+  { name: 'categories' },
+  { name: 'created_at' },
+  { name: 'updated_at' },
+]
 
 const TableHeader = () => {
   return (
@@ -36,27 +36,30 @@ const TableHeader = () => {
         </th>
       </tr>
     </thead>
-  );
-};
+  )
+}
 
 const ProjectsPage = () => {
-  const [categoryFilter, setCategoryFilter] = React.useState<string | undefined>();
-  
-  
+  const [categoryFilter, setCategoryFilter] = React.useState<
+    string | undefined
+  >()
+
   const { data, isError, error, isLoading } = useProjects({
     category: categoryFilter,
-  });
+  })
 
-  const { data: categories, isLoading: categoriesLoading, isError: categoriesError } = useCategories();
+  const {
+    data: categories,
+    isLoading: categoriesLoading,
+    isError: categoriesError,
+  } = useCategories()
   const queryClient = useQueryClient()
 
   React.useEffect(() => {
-
     queryClient.invalidateQueries({ queryKey: ['projects'] })
-   
   }, [categoryFilter])
   if (isLoading || categoriesLoading) {
-    return <LoaderPage />;
+    return <LoaderPage />
   }
 
   if (categoriesError) {
@@ -67,7 +70,7 @@ const ProjectsPage = () => {
           <p className="text-red-600">Error loading categories.</p>
         </div>
       </>
-    );
+    )
   }
 
   if (isError) {
@@ -80,7 +83,7 @@ const ProjectsPage = () => {
           </p>
         </div>
       </>
-    );
+    )
   }
 
   return (
@@ -90,11 +93,13 @@ const ProjectsPage = () => {
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
             <h1 className="text-base font-semibold text-gray-900">Projects</h1>
-            <p className="mt-2 text-sm text-gray-700">A list of all projects.</p>
+            <p className="mt-2 text-sm text-gray-700">
+              A list of all projects.
+            </p>
           </div>
           <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
             <Link
-              to={"/projects/create"}
+              to={'/projects/create'}
               type="button"
               className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
@@ -104,7 +109,10 @@ const ProjectsPage = () => {
         </div>
         {/* Category Filter Dropdown */}
         <div className="mt-6">
-          <label htmlFor="categoryFilter" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="categoryFilter"
+            className="block text-sm font-medium text-gray-700"
+          >
             Filter by Category
           </label>
           <select
@@ -157,13 +165,16 @@ const ProjectsPage = () => {
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                         {data.updatedAt}
                       </td>
-                        
+
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                            <Link to={`/projects/${data.id}`} className="text-indigo-600 hover:text-indigo-900">
-                                    Access<span className="sr-only">, {data.id}</span>
-                            </Link>
-                     </td>
-                        
+                        <Link
+                          to={`/projects/${data.id}`}
+                          className="text-indigo-600 hover:text-indigo-900"
+                        >
+                          Access
+                          <span className="sr-only">, {data.id}</span>
+                        </Link>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -173,7 +184,7 @@ const ProjectsPage = () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ProjectsPage;
+export default ProjectsPage
