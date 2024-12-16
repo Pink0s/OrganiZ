@@ -93,8 +93,6 @@ export const ProjectDetailsPage = () => {
             <DetailsRow label="Updated at" value={data?.updatedAt} />
           </dl>
         </div>
-
-        {/* Tasks Section */}
         {(tasks!.length > 0) && (
           <div className="mt-8">
             <h3 className="text-base font-semibold text-gray-900">Tasks</h3>
@@ -148,6 +146,12 @@ export const ProjectDetailsPage = () => {
             className="inline-flex items-center rounded-md bg-orange-400 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
           >
             Add User
+          </Link>
+          <Link
+            to={`/tasks/create/${projectId}`}
+            className="inline-flex items-center rounded-md bg-orange-400 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          >
+            Create a task
           </Link>
         </div>
 
