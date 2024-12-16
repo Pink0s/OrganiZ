@@ -1,3 +1,3 @@
 export default interface IFindAllCategoriesAPI {
-    token: string,
+  token: string
 }

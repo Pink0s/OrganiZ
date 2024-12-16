@@ -1,3 +1,3 @@
 export default interface IUserProvider {
-    children: React.ReactNode;
+  children: React.ReactNode
 }

@@ -138,10 +138,8 @@ export class UserAccountsService {
    * @throws {NotFoundException} If the user account with the given email does not exist.
    */
   async getByEmail(email: string): Promise<UserAccount> {
-    const userAccount = await this.userAccountRepository.findOneBy({
-      email: email,
-    });
-
+    const userAccount = await this.userAccountRepository.findOneBy({ email :email })
+    console.log(JSON.stringify(userAccount))
     if (!userAccount) {
       throw new NotFoundException('User does not exist');
     }

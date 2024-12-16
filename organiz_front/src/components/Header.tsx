@@ -4,23 +4,31 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router'
 import { useAuth } from '../hooks/useAuth'
 
-
 const navigation = [
   { name: 'Home', destination: '/' },
-  { name: 'Categories', destination: '/categories' }
+  { name: 'Categories', destination: '/categories' },
+  { name: 'Projects', destination: '/projects' },
 ]
 
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const {logout} = useAuth();
-  
+  const { logout } = useAuth()
+
   return (
     <header className="bg-white">
-      <nav aria-label="Global" className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+      <nav
+        aria-label="Global"
+        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+      >
         <div className="flex flex-1">
           <div className="hidden lg:flex lg:gap-x-12">
             {navigation.map((item) => (
-              <Link key={`${item.name}`} to={item.destination} id={item.name} className="text-sm/6 font-semibold text-gray-900">
+              <Link
+                key={`${item.name}`}
+                to={item.destination}
+                id={item.name}
+                className="text-sm/6 font-semibold text-gray-900"
+              >
                 {item.name}
               </Link>
             ))}
@@ -37,12 +45,19 @@ function Header() {
           </div>
         </div>
         <div className="flex flex-1 justify-end">
-          <button className="text-sm/6 font-semibold text-gray-900" onClick={() => logout!()}>
+          <button
+            className="text-sm/6 font-semibold text-gray-900"
+            onClick={() => logout!()}
+          >
             Log out <span aria-hidden="true">&rarr;</span>
           </button>
         </div>
       </nav>
-      <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
+      <Dialog
+        open={mobileMenuOpen}
+        onClose={setMobileMenuOpen}
+        className="lg:hidden"
+      >
         <div className="fixed inset-0 z-10" />
         <DialogPanel className="fixed inset-y-0 left-0 z-10 w-full overflow-y-auto bg-white px-6 py-6">
           <div className="flex items-center justify-between">
@@ -57,7 +72,10 @@ function Header() {
               </button>
             </div>
             <div className="flex flex-1 justify-end">
-              <button className="text-sm/6 font-semibold text-gray-900" onClick={() => logout!()}>
+              <button
+                className="text-sm/6 font-semibold text-gray-900"
+                onClick={() => logout!()}
+              >
                 Log out <span aria-hidden="true">&rarr;</span>
               </button>
             </div>

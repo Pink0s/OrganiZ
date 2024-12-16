@@ -55,7 +55,7 @@ export class ProjectsController {
    * Retrieves all projects, optionally filtered by status name.
    *
    * @param {any} request - The incoming HTTP request, containing user information.
-   * @param {string} [statusName] - The optional status name to filter projects.
+   * @param {string} [category] - The optional category name to filter projects.
    * @returns {Promise<Project[]>} A promise that resolves to an array of projects.
    *
    */
@@ -64,17 +64,17 @@ export class ProjectsController {
   @ApiCreatedResponse({ description: 'Get all projects' })
   @HttpCode(HttpStatus.OK)
   @ApiQuery({
-    name: 'statusName',
+    name: 'category',
     required: false,
     type: String,
-    description: 'Filter by status name',
+    description: 'Filter by category name',
   })
   async getAllProjects(
     @Request() request: any,
-    @Query('statusName') statusName?: string,
+    @Query('category') category?: string,
   ): Promise<Project[]> {
     this.logger.log(`${request.method} ${request.url}`);
-    return this.projectsService.findAll(request.user.id, statusName);
+    return this.projectsService.findAll(request.user.id, category);
   }
 
   /**
