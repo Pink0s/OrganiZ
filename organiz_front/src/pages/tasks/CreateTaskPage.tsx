@@ -1,14 +1,14 @@
-import { Error } from '../../components/Error'
 import Header from '../../components/Header'
-import { useAddUserToProject } from '../../hooks/useProjects'
+import { Error } from '../../components/Error'
 import { StyledTitle } from '../../components/StyledTitle'
 import { StyledInput } from '../../components/StyledInput'
 import { useParams } from 'react-router'
+import { useCreateTask } from '../../hooks/useTasks'
 
-export const AddUserToProjectPage = () => {
+export const CreateTaskPage = () => {
   const { projectId } = useParams()
-  const { formik, isError, errorContent } = useAddUserToProject({
-    projectId: projectId!!,
+  const { formik, isError, errorContent } = useCreateTask({
+    projectId: Number(projectId!!),
   })
 
   return (
@@ -19,22 +19,35 @@ export const AddUserToProjectPage = () => {
           {isError && (
             <Error title={errorContent.title} errors={errorContent.errors} />
           )}
-          <StyledTitle text="Add an user to the project" />
+          <StyledTitle text="Create a new Task" />
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form onSubmit={formik.handleSubmit} className="space-y-6">
               <StyledInput
-                label="User email"
-                id="email"
+                label="Task name"
+                id="name"
                 type="text"
-                name="email"
+                name="name"
                 required={true}
                 autocomplete={undefined}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value={formik.values.email}
-                touched={formik.touched.email}
-                errors={formik.errors.email}
+                value={formik.values.name}
+                touched={formik.touched.name}
+                errors={formik.errors.name}
+              />
+              <StyledInput
+                label="Task description"
+                id="description"
+                type="text"
+                name="description"
+                required={true}
+                autocomplete={undefined}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.description}
+                touched={formik.touched.description}
+                errors={formik.errors.description}
               />
               <div>
                 <button

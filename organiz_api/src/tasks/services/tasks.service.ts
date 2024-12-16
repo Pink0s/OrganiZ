@@ -123,6 +123,8 @@ export class TasksService {
       query.andWhere('task.assigned_user_id = :userId', { userId });
     }
 
+    query.orderBy('status.id', 'ASC');
+    
     return await query.getMany();
   }
 
